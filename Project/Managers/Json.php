@@ -50,7 +50,7 @@ class Json implements JsonInterface {
 
     function appendFileData(array $data): bool
     {
-        $bytes = file_put_contents($this->dataFile, json_encode($data), FILE_APPEND);
+        $bytes = file_put_contents($this->dataFile, json_encode($data, JSON_PRETTY_PRINT), FILE_APPEND);
         if(!$bytes) {
             return false;
         }
@@ -59,7 +59,7 @@ class Json implements JsonInterface {
 
     function setFileData(array $data): bool
     {
-        $bytes = file_put_contents($this->dataFile, json_encode($data));
+        $bytes = file_put_contents($this->dataFile, json_encode($data, JSON_PRETTY_PRINT));
         if(!$bytes) {
             return false;
         }

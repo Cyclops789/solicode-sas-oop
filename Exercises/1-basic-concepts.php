@@ -5,20 +5,8 @@ class Voiture {
     public $modele;
     public $couleur;
 
-    public function __construct()
-    {
-
-    }
-
     public function demarrer() {
         echo "La voiture démarre.";
-    }
-}
-
-class Car extends Voiture {
-    public function __construct()
-    {
-        $this->marque = "s";
     }
 }
 
