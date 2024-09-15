@@ -11,4 +11,9 @@ class Borrowing {
         'borrowed_books_ids',
         'reader_id',
     ];
+
+    public function __construct(array $book)
+    {
+
+    }
 }

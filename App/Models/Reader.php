@@ -25,6 +25,7 @@ class Reader extends Console {
         $this->printLine("[a] - Create reader account");
         $this->printLine("[b] - Login to a reader account");
         $this->printLine("[c] - Delete a reader account");
+        $this->printLine("Type 'back' to return or 'exit' to exit the application");
 
         $this->askQuestion("Enter the letter to continue: ", $this->expect);
 
@@ -32,17 +33,22 @@ class Reader extends Console {
             'a' => $this->createReaderAccount(),
             'b' => $this->enterReaderAccount(),
             'c' => $this->deleteReaderAccount(),
+            'back' => new Console(),
         };
-        
-    }
 
+        if($this->currentUser) {
+            (new Book())->enterBooksMode();
+        } else {
+            $this->__construct();
+        }
+    }
 
     public function createReaderAccount()
     {
         $fist_name = $this->askQuestion("# Enter the first name: ", []);
         $last_name = $this->askQuestion("# Enter the last name: ", []);
         $address = $this->askQuestion("# Enter the address: ", []);
-        $card_id = "CD/".random_int(1, 9999);
+        $card_id = "CD-".random_int(1, 9999);
 
         $this->currentUser = $data = [
             'id' => random_int(1, 9999),
@@ -54,8 +60,10 @@ class Reader extends Console {
         ];
 
         $this->insertRow($data);
-
+        $this->clear();
+        $this->separator();
         $this->printLine("Welcome {$fist_name} {$last_name}! your card id is: {$card_id}");
+        $this->separator();
     }
 
     public function enterReaderAccount()
@@ -63,6 +71,7 @@ class Reader extends Console {
         $this->expect = ['a', 'b'];
         $this->printLine("[a] - Enter using id");
         $this->printLine("[b] - Enter using card id");
+        $this->printLine("Type 'back' to return or 'exit' to exit the application");
 
         $this->askQuestion("Enter the letter to continue: ", $this->expect);
 
@@ -93,20 +102,21 @@ class Reader extends Console {
         $this->printLine("[b] - Delete using card id");
 
         $this->askQuestion("Enter the letter to continue: ", $this->expect);
-
-        $removed = match ($this->value) {
-            'a' => function () {
+        
+        switch ($this->value) {
+            case 'a': 
                 $this->askQuestion("Enter the id: ");
-                return $this->removeRow($this->value, 'id');
-            },
-            'b' => function () {
+                $removed = $this->removeRow($this->value, 'id');
+                break;
+            case 'b':
                 $this->askQuestion("Enter the card id: ");
-                return $this->removeRow($this->value, 'id_card');
-            }
+                $removed = $this->removeRow($this->value, 'id_card');
+                break;
         };
 
         if($removed) {
             $this->printLine("Reader has been successfully deleted");
+            $this->__construct();
         } else {
             $this->printLine("User not found, please try again");
             $this->deleteReaderAccount();

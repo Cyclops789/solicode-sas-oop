@@ -23,8 +23,8 @@ class Json {
     {   
         $data = $this->getFileData();
         $index = $this->getRowIndex($id, $data, $by);
-        
-        if(is_int($index)) {
+
+        if(is_int($index) && $index !== -1) {
             unset($data[$index]);
             return $this->setFileData($data);
         }
@@ -45,7 +45,7 @@ class Json {
     public function getRowIndex(string|int $needle, array $data, string $by = 'id'): int
     {
         $index = array_search($needle, array_column($data, $by));
-        return $index;
+        return $index === false ? -1 : $index;
     }
 
     function setFileData(array $data): bool

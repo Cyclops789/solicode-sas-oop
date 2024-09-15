@@ -12,12 +12,13 @@ class Console extends Json {
 
     public function __construct() 
     {
+        $this->clear();
         $this->expect = ['a', 'b'];
-        $this->printLine("#####################################################");
+        $this->separator();
         $this->printLine("[a] - Enter reader mode");
         $this->printLine("[b] - Enter author mode");
         $this->askQuestion("Enter the letter to continue: ", $this->expect);
-        $this->printLine("#####################################################");
+        $this->separator();
         
         $this->clear();
         $this->startModelMode();
@@ -31,10 +32,19 @@ class Console extends Json {
         };
     }
 
+    public function separator()
+    {
+        $this->printLine("#####################################################");
+    }
+
     public function askQuestion(string $question, array $expect = []): string 
     {
         $this->printLine($question);
         $this->value = trim(fgets(STDIN));
+
+        if($this->value === 'exit') {
+            die(0);
+        }
 
         // verify the inputs
         if(sizeof($expect) > 0) {
