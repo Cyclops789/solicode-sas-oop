@@ -2,27 +2,27 @@
 
 namespace App\Managers;
 
-use App\Interfaces\JsonInterface;
 
-class Json implements JsonInterface {
+class Json {
 
     private string $dataFile;
+    public array|null $data;
 
-    public function __construct()
+    public function setModel(string $model)
     {
-        $this->dataFile = __DIR__."../Database/data.json";
+        $this->dataFile = __DIR__."/../Databases/".$model.".json";
     }
 
     public function insertRow(array $row): bool
     {
-        $newData = [$this->getFileData(), $row];
-        return $this->appendFileData($newData);
+        $newData = [...$this->getFileData(), $row];
+        return $this->setFileData($newData);
     }
 
-    public function removeRow(string|int $id): bool
+    public function removeRow(string|int $id, string $by = 'id'): bool
     {   
         $data = $this->getFileData();
-        $index = $this->getRowIndex($id, $data);
+        $index = $this->getRowIndex($id, $data, $by);
         
         if(is_int($index)) {
             unset($data[$index]);
@@ -31,30 +31,21 @@ class Json implements JsonInterface {
         return false;
     }
 
-    public function getRow(string|int $id): array|null
+    public function getRow(string|int $id, string $by = 'id'): void
     {
         $data = $this->getFileData();
-        $index = $this->getRowIndex($id, $data);
+        $index = $this->getRowIndex($id, $data, $by);
 
         if(is_int($index)) {
-            return $data[$index];
+            $this->data = $data[$index];
         }
-        return null;
+        $this->data = null;
     }
 
     public function getRowIndex(string|int $needle, array $data, string $by = 'id'): int
     {
         $index = array_search($needle, array_column($data, $by));
         return $index;
-    }
-
-    function appendFileData(array $data): bool
-    {
-        $bytes = file_put_contents($this->dataFile, json_encode($data, JSON_PRETTY_PRINT), FILE_APPEND);
-        if(!$bytes) {
-            return false;
-        }
-        return true;
     }
 
     function setFileData(array $data): bool
@@ -68,6 +59,11 @@ class Json implements JsonInterface {
 
     function getFileData(): array
     {
+        if(!file_exists($this->dataFile)) {
+            // Touch the file
+            file_put_contents($this->dataFile, "");
+            return [];
+        }
         return json_decode(file_get_contents($this->dataFile), true);
     }
 }
