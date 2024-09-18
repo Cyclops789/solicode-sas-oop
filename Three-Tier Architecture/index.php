@@ -6,15 +6,16 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="post">
+    <form action="backend.php" method="post">
+        <h1>Books</h1>
         <div>
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name">
         </div>
 
         <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password">
+            <label for="isbn">ISBN</label>
+            <input type="isbn" id="isbn" name="isbn">
         </div>
 
         <button type="submit">
