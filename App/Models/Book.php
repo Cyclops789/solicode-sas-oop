@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Managers\Console;
 use App\Models\Borrowing;
+use App\Models\Author;
 
 class Book extends Console
 {
@@ -15,6 +16,7 @@ class Book extends Console
         'availability',
         'created_at',
     ];
+    private bool $authorMode;
 
     public function __construct()
     {
@@ -24,6 +26,7 @@ class Book extends Console
     public function enterBooksMode(bool $authorMode = false)
     {
         $this->expect = ['a', 'b', 'c'];
+        $this->authorMode = $authorMode;
         $this->printLine("[a] - Show all books");
         $this->printLine("[b] - Search a books");
         $this->printLine("[c] - Borrow a book");
@@ -31,6 +34,7 @@ class Book extends Console
             $this->expect = [...$this->expect, 'd'];
             $this->printLine("[d] - Create a new book");
         }
+        $this->printLine("Type 'back' to return to the model or 'exit' to exit the application");
 
         $this->askQuestion("Enter the letter to continue: ", $this->expect);
 
@@ -50,6 +54,12 @@ class Book extends Console
             case 'd':
                 $this->borrowBook();
                 break;
+
+            case 'back':
+                if($authorMode) {
+                    return new Author();
+                }
+                return new Reader();
         }
         $this->enterBooksMode();
     }
@@ -90,7 +100,8 @@ class Book extends Console
                 $this->askQuestion("[Y/n] Do you want to borrow '{$this->data['title']}' ?");
                 switch (strtolower($this->value)) {
                     case 'y':
-                        new Borrowing($this->data);
+                        $this->askQuestion("How much days are you going to borrow it.");
+                        new Borrowing([...$this->data, 'expect_return' => $this->value], $this->authorMode ? 'author' : 'reader');
                         break;
                     
                     default:

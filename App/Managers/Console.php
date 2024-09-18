@@ -48,6 +48,7 @@ class Console extends Json {
 
         // verify the inputs
         if(sizeof($expect) > 0) {
+            $expect = [...$expect, 'back'];
             $found = false;
             foreach ($expect as $expected) {
                 if($this->value === $expected) {

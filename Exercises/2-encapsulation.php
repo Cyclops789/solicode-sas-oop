@@ -1,7 +1,7 @@
 <?php
 
 class Utilisateur {
-    private $nom;
+    public $nom;
     private $prenom;
     private $email;
 
@@ -20,44 +20,45 @@ class Utilisateur {
     }
 }
 
-$user = new Utilisateur("Hamza", "Jarane", "tes@ssa.com");
+$user = new Utilisateur("Hamza", "Jarane", "test@test.com");
+$user->nom = "";
 
-$user->setNom("test");
+// $user->setNom("test");
 
 // echo($user->getNom());
 
-class CompteBancaire {
-    private $solde;
+// class CompteBancaire {
+//     private $solde;
 
-    public function __construct($soldeInitial) {
-        $this->solde = $soldeInitial;
-    }
+//     public function __construct($soldeInitial) {
+//         $this->solde = $soldeInitial;
+//     }
 
-    public function getSolde() {
-        return $this->solde;
-    }
+//     public function getSolde() {
+//         return $this->solde;
+//     }
 
-    public function deposer($montant) {
-        if ($montant > 0) {
-            $this->solde += $montant;
-        } else {
-            echo "Le montant doit être positif.";
-        }
-    }
+//     public function deposer($montant) {
+//         if ($montant > 0) {
+//             $this->solde += $montant;
+//         } else {
+//             echo "Le montant doit être positif.";
+//         }
+//     }
 
-    public function retirer($montant) {
-        if ($montant <= $this->solde) {
-            $this->solde -= $montant;
-        } else {
-            echo "Solde insuffisant.";
-        }
-    }
-}
+//     public function retirer($montant) {
+//         if ($montant <= $this->solde) {
+//             $this->solde -= $montant;
+//         } else {
+//             echo "Solde insuffisant.";
+//         }
+//     }
+// }
 
-$account = new CompteBancaire(40);
+// $account = new CompteBancaire(40);
 
-echo($account->getSolde());
+// echo($account->getSolde());
 
-$account->deposer(50);
+// $account->deposer(50);
 
-echo($account->getSolde());
+// echo($account->getSolde());

@@ -15,16 +15,18 @@ class Reader extends Console {
         'borrowed_ids',
     ];
 
-    private array $currentUser;
+    private array|null $currentUser;
 
     public function __construct()
     {
+        $this->currentUser = null;
         $this->setModel("reader");
-        $this->expect = ['a', 'b', 'c'];
+        $this->expect = ['a', 'b', 'c', 'd'];
 
         $this->printLine("[a] - Create reader account");
         $this->printLine("[b] - Login to a reader account");
         $this->printLine("[c] - Delete a reader account");
+        $this->printLine("[d] - Get list of readers");
         $this->printLine("Type 'back' to return or 'exit' to exit the application");
 
         $this->askQuestion("Enter the letter to continue: ", $this->expect);
@@ -33,6 +35,7 @@ class Reader extends Console {
             'a' => $this->createReaderAccount(),
             'b' => $this->enterReaderAccount(),
             'c' => $this->deleteReaderAccount(),
+            'd' => $this->getListofReaders(),
             'back' => new Console(),
         };
 
@@ -41,6 +44,15 @@ class Reader extends Console {
         } else {
             $this->__construct();
         }
+    }
+
+    public function getListofReaders()
+    {
+        $this->printLine("--------------------------------------");
+        foreach ($this->getFileData() as $user) {
+            $this->printLine("#".$user['id']."  #".$user['id_card']." ".$user['first_name']." ".$user['last_name']);
+        }
+        $this->printLine("--------------------------------------");
     }
 
     public function createReaderAccount()
@@ -83,6 +95,10 @@ class Reader extends Console {
             case 'b':
                 $this->askQuestion("Enter the card id: ");
                 $this->getRow($this->value, 'id_card');
+                break;
+
+            case 'back':
+                $this->__construct();
                 break;
         };
 

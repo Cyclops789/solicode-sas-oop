@@ -38,6 +38,7 @@ class Json {
 
         if(is_int($index)) {
             $this->data = $data[$index];
+            return;
         }
         $this->data = null;
     }
@@ -57,13 +58,23 @@ class Json {
         return true;
     }
 
-    function getFileData(): array
+    public function getFileData(): array
     {
         if(!file_exists($this->dataFile)) {
             // Touch the file
-            file_put_contents($this->dataFile, "");
+            file_put_contents($this->dataFile, "[]");
             return [];
         }
         return json_decode(file_get_contents($this->dataFile), true);
+    }
+
+    public function getID(): int
+    {
+        return random_int(1000, 9999);
+    }
+
+    public function getDate(): string
+    {
+        return date("F j, Y, g:i a");
     }
 }

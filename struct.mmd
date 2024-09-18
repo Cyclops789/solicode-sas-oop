@@ -1,0 +1,47 @@
+---
+title: Models
+---
+classDiagram
+    class Borrowing {
+        +Int id
+        +Int borrowed_book_id
+        +Date start_date
+        +Date expected_return_date
+        +Date actual_return_date
+        +Date reader_id
+    }
+    
+    class Book {
+        +Int id
+        +String title
+        +Int author_id
+        +String isbn
+        +String availability: borrowed|not_borrowed
+        +Date created_at
+    }
+    
+    class Book {
+        +Int id
+        +String title
+        +Int author_id
+        +String isbn
+        +String availability: borrowed|not_borrowed
+        +Date created_at
+    }
+
+    class Reader {
+        +Int id
+        +String id_card
+        +String first_name
+        +String last_name
+        +String address
+        +Int[] borrowed_ids
+    }
+
+    class Author {
+        +Int id
+        +String first_name
+        +String last_name
+        +String nationality
+        +Int[] books_ids
+    }

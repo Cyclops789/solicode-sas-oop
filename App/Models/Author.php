@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-class Authors {
+class Author {
     private $modelStructure = [
         'id',
         'first_name',
         'last_name',
         'nationality',
-        'books_id',
+        'books_ids',
     ];
 }
