@@ -30,10 +30,10 @@ class Passeport {
     }
 
 
-//     public function setPersonne(Personne $personne): void {
-//         $this->personne = $personne;
-//     }
-// }
+    public function setPersonne(Personne $personne): void {
+        $this->personne = $personne;
+    }
+}
 
 // $passport = new Passeport();
 // $personne = new Personne();
