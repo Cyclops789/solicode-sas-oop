@@ -3,15 +3,15 @@
 namespace App\Managers;
 
 use App\Managers\Json;
-use App\Models\Book;
+use App\Services\BookService;
 
 class Console extends Json {
-    public string $value;
-    public array $expect;
+    protected string $value;
+    protected array $expect;
 
     public function __construct()
     {
-        (new Book())->enterBooksMode();
+        new BookService();
     }
 
     public function separator()

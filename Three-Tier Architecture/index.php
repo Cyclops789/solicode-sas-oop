@@ -1,26 +1,31 @@
+<?php
+    require_once 'UserService.php';
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add a new user</title>
 </head>
 <body>
-    <form action="backend.php" method="post">
-        <h1>Books</h1>
-        <div>
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name">
-        </div>
-
-        <div>
-            <label for="isbn">ISBN</label>
-            <input type="isbn" id="isbn" name="isbn">
-        </div>
-
-        <button type="submit">
-            Login
-        </button>
+    <h1>Add a new user</h1>
+    <form action="backend.php" method="POST">
+        Name: <input type="text" name="nom" required><br>
+        Email: <input type="email" name="email" required><br>
+        <button type="submit">Ajouter</button>
     </form>
+
+    <div>
+        <div>
+            List of users
+        </div>
+        <ul>
+            <?php 
+                foreach ((new UserService())->getUsers() as $user) {
+                    echo "<li>{$user['nom']} - {$user['email']}</li>";
+                }
+            ?>
+        </ul>
+    </div>
 </body>
 </html>

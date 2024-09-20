@@ -21,7 +21,7 @@ spl_autoload_register(function ($class) {
     <strong>Books</strong>
     <ul>
         <?php 
-            foreach ((new App\Models\Book(false))->getAllBooks() as $book) {
+            foreach ((new App\Services\BookService(false))->model->getBooks() as $book) {
                 echo "<li>#{$book['id']} - {$book['title']}</li>";
             }; 
         ?>

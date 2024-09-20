@@ -13,7 +13,7 @@ class Book extends Console
         'title',
         'author_id',
         'isbn',
-        'availability',
+        'available',
         'created_at',
     ];
     private bool $authorMode;
