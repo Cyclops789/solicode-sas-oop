@@ -2,7 +2,7 @@
 
 require_once 'UserModel.php';
 
-class UserService extends User {
+class UserService extends UserModel {
     public $nom, $email;
 
     public function addUser() {

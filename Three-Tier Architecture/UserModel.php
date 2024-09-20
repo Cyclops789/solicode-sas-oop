@@ -1,6 +1,6 @@
 <?php
 
-class User {
+class UserModel {
     private $pdo;
 
     public function __construct() {
@@ -10,8 +10,10 @@ class User {
     public function insertUser($nom, $email) {
         $sql = "INSERT INTO utilisateurs (nom, email) VALUES (:nom, :email)";
         $stmt = $this->pdo->prepare($sql);
+        
         $stmt->bindParam(':nom', $nom);
         $stmt->bindParam(':email', $email);
+
         $stmt->execute();
     }
 
