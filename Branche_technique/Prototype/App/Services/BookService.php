@@ -44,8 +44,6 @@ class BookService extends Console {
         foreach ($this->model->getBooks() as $book) {
             $this->printLine("Title : {$book['title']}");
             $this->printLine("ISBN : {$book['isbn']}");
-            $this->printLine("available : {$book['available']}");
-            $this->printLine("Published at : {$book['published_at']}");
             $this->separator();
         }
     }
@@ -53,8 +51,7 @@ class BookService extends Console {
     public function saveConsoleBook(): void
     {
         $this->model->title = $this->askQuestion("Enter the title: ");
-        $this->model->isbn = $this->askQuestion("Enter the isbn: ");
-        $this->model->published_at = $this->askQuestion("Enter the publishing date: ");
+        $this->model->isbn = $this->askQuestion("Enter the ISBN: ");
         $this->model->addBook();
 
         $this->separator();
