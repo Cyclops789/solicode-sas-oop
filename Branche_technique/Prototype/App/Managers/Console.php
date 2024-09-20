@@ -2,35 +2,16 @@
 
 namespace App\Managers;
 
-use App\Models\Reader;
-use App\Models\Author;
 use App\Managers\Json;
-use App\Prototype\Book;
+use App\Models\Book;
 
 class Console extends Json {
     public string $value;
     public array $expect;
 
-    public function __construct() 
+    public function __construct()
     {
-        $this->clear();
-        $this->expect = ['a', 'b'];
-        $this->separator();
-        $this->printLine("[a] - Enter reader mode");
-        $this->printLine("[b] - Enter author mode");
-        $this->askQuestion("Enter the letter to continue: ", $this->expect);
-        $this->separator();
-        
-        $this->clear();
-        $this->startModelMode();
-    }
-
-    public function startModelMode()
-    {
-        match ($this->value) {
-            'a' => new Reader(),
-            'b' => new Author(),
-        };
+        (new Book())->enterBooksMode();
     }
 
     public function separator()

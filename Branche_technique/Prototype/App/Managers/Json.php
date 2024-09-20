@@ -2,7 +2,6 @@
 
 namespace App\Managers;
 
-
 class Json {
 
     private string $dataFile;

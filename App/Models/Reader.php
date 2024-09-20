@@ -60,10 +60,10 @@ class Reader extends Console {
         $fist_name = $this->askQuestion("# Enter the first name: ", []);
         $last_name = $this->askQuestion("# Enter the last name: ", []);
         $address = $this->askQuestion("# Enter the address: ", []);
-        $card_id = "CD-".random_int(1, 9999);
+        $card_id = "CD-".$this->getID();
 
         $this->currentUser = $data = [
-            'id' => random_int(1, 9999),
+            'id' => $this->getID(),
             'id_card'  => $card_id,
             'first_name' => $fist_name,
             'last_name' => $last_name,
