@@ -4,13 +4,12 @@ namespace App\Managers;
 
 class Json {
 
-    protected string $dataFile = __DIR__."/../DB/Database.json";
+    protected string $dataFile;
     protected array|null $data = null;
-    protected string $modelValue;
 
     public function setModel(string $model)
     {
-        $this->modelValue = $model;
+        $this->dataFile = __DIR__."/../DB/".$model.".json";
     }
 
     public function insertRow(array $row): bool
@@ -51,7 +50,6 @@ class Json {
 
     function setFileData(array $data): bool
     {
-        
         $bytes = file_put_contents($this->dataFile, json_encode($data, JSON_PRETTY_PRINT));
         if(!$bytes) {
             return false;
@@ -63,13 +61,10 @@ class Json {
     {
         if(!file_exists($this->dataFile)) {
             // Touch the file
-            file_put_contents($this->dataFile, "{}");
+            file_put_contents($this->dataFile, "[]");
             return [];
         }
-        $data = json_decode(file_get_contents($this->dataFile));
-        return match ($this->modelValue) {
-            "books" => $data->books,
-        };
+        return json_decode(file_get_contents($this->dataFile), true);
     }
 
     public static function getID(): int

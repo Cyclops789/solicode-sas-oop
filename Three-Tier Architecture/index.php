@@ -1,7 +1,3 @@
-<?php
-    require_once 'UserService.php';
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,6 +17,8 @@
         </div>
         <ul>
             <?php 
+                require_once 'UserService.php';
+                
                 foreach ((new UserService())->getUsers() as $user) {
                     echo "<li>{$user['nom']} - {$user['email']}</li>";
                 }

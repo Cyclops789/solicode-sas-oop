@@ -7,7 +7,7 @@ class UserModel {
         $this->pdo = new PDO('mysql:host=localhost;dbname=test', 'hamza', '123');
     }
 
-    public function insertUser($nom, $email) {
+    protected function insertUser($nom, $email) {
         $sql = "INSERT INTO utilisateurs (nom, email) VALUES (:nom, :email)";
         $stmt = $this->pdo->prepare($sql);
         
@@ -17,7 +17,7 @@ class UserModel {
         $stmt->execute();
     }
 
-    public function fetchUsers()
+    protected function fetchUsers()
     {
         $sql = "SELECT * FROM utilisateurs";
         $stmt = $this->pdo->prepare($sql);
@@ -26,4 +26,3 @@ class UserModel {
         return $stmt->fetchAll();
     }
 }
-?>
