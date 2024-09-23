@@ -7,14 +7,15 @@ use App\Entities\Book as BookModel;
 
 class Book extends Console
 {
+    private string $modelName = "books";
     public function __construct()
     {
-        $this->setModel("books");
+        $this->setModel($this->modelName);
     }
 
     public function getBooks(): array
     {
-        return $this->getFileData();
+        return $this->getFileData()[$this->modelName];
     }
 
     public function addBook(BookModel $book): void

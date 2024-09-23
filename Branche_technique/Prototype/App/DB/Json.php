@@ -4,23 +4,26 @@ namespace App\DB;
 
 class Json {
 
-    protected string $dataFile;
+    protected string $dataFile = __DIR__."/../DB/Database.json";
     protected array|null $data = null;
+    private string $model;
 
     public function setModel(string $model)
     {
-        $this->dataFile = __DIR__."/../DB/".$model.".json";
+        $this->model = $model;
     }
 
     public function insertRow(array $row): bool
     {
-        $newData = [...$this->getFileData(), $row];
+        $newData = $this->getFileData();
+        $newData[$this->model][] = $row;
+        
         return $this->setFileData($newData);
     }
 
     public function removeRow(string|int $id, string $by = 'id'): bool
     {   
-        $data = $this->getFileData();
+        $data = $this->getFileData()[$this->model];
         $index = $this->getRowIndex($id, $data, $by);
 
         if(is_int($index) && $index !== -1) {
@@ -32,7 +35,7 @@ class Json {
 
     public function getRow(string|int $id, string $by = 'id'): void
     {
-        $data = $this->getFileData();
+        $data = $this->getFileData()[$this->model];
         $index = $this->getRowIndex($id, $data, $by);
 
         if(is_int($index)) {
@@ -61,7 +64,9 @@ class Json {
     {
         if(!file_exists($this->dataFile)) {
             // Touch the file
-            file_put_contents($this->dataFile, "[]");
+            file_put_contents($this->dataFile, json_encode([
+                $this->model => [],
+            ]));
             return [];
         }
         return json_decode(file_get_contents($this->dataFile), true);
