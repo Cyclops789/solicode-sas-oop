@@ -4,57 +4,52 @@ namespace App\DB;
 
 class Database
 {
-
-    protected string $dataFile;
-    public array|null $data = null;
+    public $books = [];
+    private string $dataFile = __DIR__ . "/../DB/data.db";
+    private string $model;
 
     public function __construct(string $model)
     {
-        $this->dataFile = __DIR__ . "/../DB/{$model}.db";
+        $this->model = $model;
+        $this->setModelData();
     }
 
     public function storeModelData(mixed $row): bool
     {
-        $data = $this->getModelData(false);
-        $data[] = serialize($row);
-        
-        $content = "";
-        foreach ($data as $d) {
-            if(!empty(trim($d))) {
-                $content .= $d."\n";
-            }
+        switch ($this->model) {
+            case 'books':
+                array_push($this->books, $row);
+                break;
         }
-
-        return $this->setModelData($content);
+        
+        return $this->saveData();
     }
 
-    function setModelData(string $data): bool
+    function saveData(): bool
     {
-        $bytes = file_put_contents($this->dataFile, $data);
+        $bytes = file_put_contents($this->dataFile, serialize($this));
         if (!$bytes) {
             return false;
         }
         return true;
     }
 
-    public function getModelData($serialized = true): array
+    public function setModelData(): void
     {
         if (!file_exists($this->dataFile)) {
             file_put_contents($this->dataFile, "");
-            return [];
+            return;
         }
 
-        $data = file($this->dataFile);
-        if (!$serialized) {
-            return $data;
-        }
-        return array_filter(array_map(function ($class) {
-            return unserialize(trim($class));
-        }, $data), function ($class) {
-            if(!$class) {
-                return false;
+        $contents = file_get_contents($this->dataFile);
+        $data = unserialize($contents);
+
+        if($data) {
+            switch ($this->model) {
+                case 'books':
+                    $this->books = $data->books;
+                    break;
             }
-            return true;
-        });
+        }
     }
 }

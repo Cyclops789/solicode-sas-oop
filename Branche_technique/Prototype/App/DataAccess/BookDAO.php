@@ -17,7 +17,7 @@ class BookDAO
 
     public function getBooks(): array
     {
-        return $this->database->getModelData();
+        return $this->database->books;
     }
 
     public function addBook(Book $book): void
