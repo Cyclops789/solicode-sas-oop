@@ -7,9 +7,6 @@ use App\Entities\Book as BookModel;
 
 class Book extends Console
 {
-    public $title;
-    public $isbn;
-    
     public function __construct()
     {
         $this->setModel("books");
