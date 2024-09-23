@@ -5,7 +5,6 @@ namespace App\Managers;
 use App\Models\Reader;
 use App\Models\Author;
 use App\Managers\Json;
-use App\Prototype\Book;
 
 class Console extends Json {
     public string $value;
