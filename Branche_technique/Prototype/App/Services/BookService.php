@@ -4,9 +4,8 @@ namespace App\Services;
 
 use App\DataAccess\Book as BookDataAccess;
 use App\Entities\Book;
-use App\DB\Json;
 
-class BookService extends Json {
+class BookService {
 
     private BookDataAccess $book;
 

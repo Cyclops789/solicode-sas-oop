@@ -2,7 +2,7 @@
 
 namespace App\DB;
 
-class Json {
+class Database {
 
     protected string $dataFile = __DIR__."/../DB/Database.json";
     protected array|null $data = null;

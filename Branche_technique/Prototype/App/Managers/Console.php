@@ -2,7 +2,7 @@
 
 namespace App\Managers;
 
-use App\DB\Json;
+use App\DB\Database as Json;
 
 class Console extends Json {
     protected string $value;
