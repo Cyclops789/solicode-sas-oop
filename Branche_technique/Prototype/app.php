@@ -9,4 +9,4 @@ spl_autoload_register(function ($class) {
     }
 });
 
-new App\Managers\Console();
+new App\Interface\ConsoleInterface();

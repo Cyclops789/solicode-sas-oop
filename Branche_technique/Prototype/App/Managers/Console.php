@@ -2,21 +2,15 @@
 
 namespace App\Managers;
 
-use App\Managers\Json;
-use App\Services\BookService;
+use App\DB\Json;
 
 class Console extends Json {
     protected string $value;
     protected array $expect;
 
-    public function __construct()
-    {
-        new BookService();
-    }
-
     public function separator()
     {
-        $this->printLine("#####################################################");
+        $this->printLine("-----------------------------------------------------");
     }
 
     public function askQuestion(string $question, array $expect = []): string 

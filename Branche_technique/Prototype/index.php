@@ -1,5 +1,4 @@
-<?php
-
+<?php 
 spl_autoload_register(function ($class) {
     $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
     $baseDir = __DIR__ . '/';
@@ -10,6 +9,7 @@ spl_autoload_register(function ($class) {
     }
 });
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +21,7 @@ spl_autoload_register(function ($class) {
     <strong>Books</strong>
     <ul>
         <?php 
-            foreach ((new App\Services\BookService(false))->model->getBooks() as $book) {
+            foreach ((new App\Services\BookService())->getBooks() as $book) {
                 echo "<li>#{$book['id']} - {$book['title']}</li>";
             }; 
         ?>

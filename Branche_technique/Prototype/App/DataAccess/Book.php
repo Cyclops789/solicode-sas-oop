@@ -3,6 +3,7 @@
 namespace App\DataAccess;
 
 use App\Managers\Console;
+use App\Entities\Book as BookModel;
 
 class Book extends Console
 {
@@ -19,12 +20,12 @@ class Book extends Console
         return $this->getFileData();
     }
 
-    public function addBook(): void
+    public function addBook(BookModel $book): void
     {
         $this->insertRow([
-            'id' => static::getID(),
-            'title' => $this->title,
-            'isbn' => $this->isbn,
+            'id' => $book->getID(),
+            'title' => $book->getTitle(),
+            'isbn' => $book->getISBN(),
         ]);
     }
 }
