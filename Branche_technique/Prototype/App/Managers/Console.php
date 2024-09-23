@@ -2,9 +2,7 @@
 
 namespace App\Managers;
 
-use App\DB\Database as Json;
-
-class Console extends Json {
+class Console {
     protected string $value;
     protected array $expect;
 
@@ -48,5 +46,15 @@ class Console extends Json {
     public function printLine(string $line) 
     {
         echo $line."\n";
+    }
+
+    public static function getID(): int
+    {
+        return random_int(1000, 9999);
+    }
+
+    public static function getDate(): string
+    {
+        return date("F j, Y, g:i a");
     }
 }

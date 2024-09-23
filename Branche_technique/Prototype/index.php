@@ -22,7 +22,7 @@ spl_autoload_register(function ($class) {
     <ul>
         <?php 
             foreach ((new App\Services\BookService())->getBooks() as $book) {
-                echo "<li>#{$book['id']} - {$book['title']}</li>";
+                echo "<li>#{$book->getID()} - {$book->getTitle()}</li>";
             }; 
         ?>
     </ul> 

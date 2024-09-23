@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use App\DataAccess\Book as BookDataAccess;
+use App\DataAccess\BookDAO;
 use App\Entities\Book;
 
 class BookService {
 
-    private BookDataAccess $book;
+    private BookDAO $book;
 
     public function __construct()
     {
-        $this->book = new BookDataAccess();
+        $this->book = new BookDAO();
     }
 
     public function getBooks()

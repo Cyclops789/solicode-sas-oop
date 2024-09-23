@@ -2,83 +2,59 @@
 
 namespace App\DB;
 
-class Database {
+class Database
+{
 
-    protected string $dataFile = __DIR__."/../DB/Database.json";
-    protected array|null $data = null;
-    private string $model;
+    protected string $dataFile;
+    public array|null $data = null;
 
-    public function setModel(string $model)
+    public function __construct(string $model)
     {
-        $this->model = $model;
+        $this->dataFile = __DIR__ . "/../DB/{$model}.db";
     }
 
-    public function insertRow(array $row): bool
+    public function storeModelData(mixed $row): bool
     {
-        $newData = $this->getFileData();
-        $newData[$this->model][] = $row;
+        $data = $this->getModelData(false);
+        $data[] = serialize($row);
         
-        return $this->setFileData($newData);
-    }
-
-    public function removeRow(string|int $id, string $by = 'id'): bool
-    {   
-        $data = $this->getFileData()[$this->model];
-        $index = $this->getRowIndex($id, $data, $by);
-
-        if(is_int($index) && $index !== -1) {
-            unset($data[$index]);
-            return $this->setFileData($data);
+        $content = "";
+        foreach ($data as $d) {
+            if(!empty(trim($d))) {
+                $content .= $d."\n";
+            }
         }
-        return false;
+
+        return $this->setModelData($content);
     }
 
-    public function getRow(string|int $id, string $by = 'id'): void
+    function setModelData(string $data): bool
     {
-        $data = $this->getFileData()[$this->model];
-        $index = $this->getRowIndex($id, $data, $by);
-
-        if(is_int($index)) {
-            $this->data = $data[$index];
-            return;
-        }
-        $this->data = null;
-    }
-
-    public function getRowIndex(string|int $needle, array $data, string $by = 'id'): int
-    {
-        $index = array_search($needle, array_column($data, $by));
-        return $index === false ? -1 : $index;
-    }
-
-    function setFileData(array $data): bool
-    {
-        $bytes = file_put_contents($this->dataFile, json_encode($data, JSON_PRETTY_PRINT));
-        if(!$bytes) {
+        $bytes = file_put_contents($this->dataFile, $data);
+        if (!$bytes) {
             return false;
         }
         return true;
     }
 
-    public function getFileData(): array
+    public function getModelData($serialized = true): array
     {
-        if(!file_exists($this->dataFile)) {
-            // Touch the file
-            file_put_contents($this->dataFile, json_encode([
-                $this->model => [],
-            ]));
+        if (!file_exists($this->dataFile)) {
+            file_put_contents($this->dataFile, "");
             return [];
         }
-        return json_decode(file_get_contents($this->dataFile), true);
-    }
 
-    public static function getID(): int
-    {
-        return random_int(1000, 9999);
-    }
-
-    public static function getDate(): string
-    {
-        return date("F j, Y, g:i a");
+        $data = file($this->dataFile);
+        if (!$serialized) {
+            return $data;
+        }
+        return array_filter(array_map(function ($class) {
+            return unserialize(trim($class));
+        }, $data), function ($class) {
+            if(!$class) {
+                return false;
+            }
+            return true;
+        });
     }
 }
