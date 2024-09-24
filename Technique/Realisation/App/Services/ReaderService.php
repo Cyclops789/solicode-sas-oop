@@ -24,7 +24,7 @@ class ReaderService {
         $this->reader->addReader($reader);
     }
 
-    public function getBook(mixed $needle): Reader|null
+    public function getReader(mixed $needle): Reader|null
     {
         /** @var Reader[] */
         $readers = $this->getReaders();
@@ -43,8 +43,11 @@ class ReaderService {
         } else {
             $readersFiltered = array_filter($readers, function (Reader $reader) use ($needle) {
                 if(
-                    str_ends_with(strtolower($reader->getTitle()), strtolower($needle)) || 
-                    str_starts_with(strtolower($reader->getTitle()), strtolower($needle))
+                    str_ends_with(strtolower($reader->getFirstName()), strtolower($needle)) || 
+                    str_starts_with(strtolower($reader->getFirstName()), strtolower($needle)) || 
+
+                    str_ends_with(strtolower($reader->getLastName()), strtolower($needle)) || 
+                    str_starts_with(strtolower($reader->getLastName()), strtolower($needle))
                 ) {
                     return true;
                 }
