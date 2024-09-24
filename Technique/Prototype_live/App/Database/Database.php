@@ -5,7 +5,6 @@ namespace App\Database;
 class Database {
 
     private string $databaseFile = __DIR__."/Database.db";
-    private string $model;
     public array $books = [];
 
 
