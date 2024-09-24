@@ -105,8 +105,10 @@ class ConsoleInterface extends Console
                 $publishing_date = $this->askQuestion("Enter the publishing date: ");
                 $author = $this->askQuestion("Enter the author: ");
 
-                
+                $authorInstance = $this->authorService->getAuthor($author);
+                if(is_null($authorInstance)) {
 
+                }
                 $book = new Book($id, $isbn, $title, $publishing_date);
                 $bookService->addBook($book);
         
