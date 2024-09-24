@@ -2,13 +2,15 @@
 
 namespace App\Entities;
 
+use App\Entities\Book;
+
 class Borrow
 {
     private $id;
     private $borrowed_date;
     private $expected_return_date;
     private $actual_return_date;
-    private $book;
+    private Book $book;
 
     public function __construct($id, $borrowed_date, $expected_return_date, $actual_return_date, $book)
     {
