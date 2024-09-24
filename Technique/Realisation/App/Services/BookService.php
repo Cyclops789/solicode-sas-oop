@@ -23,4 +23,12 @@ class BookService {
     {
         $this->book->addBook($book);
     }
+
+    public function getBook(mixed $needle): Book
+    {
+        $books = $this->getBooks();
+        if(is_numeric($needle)) {
+            
+        }
+    }
 }
