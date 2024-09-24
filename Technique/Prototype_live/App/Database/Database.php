@@ -21,7 +21,7 @@ class Database {
 
         $content = file_get_contents($this->databaseFile);
         $data = unserialize($content);
-        $data->books;
+        $this->books = $data->books;
     }
 
     public function setData()

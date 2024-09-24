@@ -45,7 +45,6 @@ class ReaderService {
                 if(
                     str_ends_with(strtolower($reader->getFirstName()), strtolower($needle)) || 
                     str_starts_with(strtolower($reader->getFirstName()), strtolower($needle)) || 
-
                     str_ends_with(strtolower($reader->getLastName()), strtolower($needle)) || 
                     str_starts_with(strtolower($reader->getLastName()), strtolower($needle))
                 ) {
