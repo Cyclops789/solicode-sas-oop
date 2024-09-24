@@ -55,7 +55,7 @@ class ConsoleInterface extends Console
     {
         $book = new Book();
 
-        $book->setID($this->getID());
+        $book->setID(time());
         $book->setTitle($this->askQuestion("Enter the title: "));
         $book->setISBN($this->askQuestion("Enter the ISBN: "));
 
