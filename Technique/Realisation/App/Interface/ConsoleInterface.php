@@ -89,13 +89,18 @@ class ConsoleInterface extends Console
             case 'b':
                 $this->separator();
                 foreach ($bookService->getBooks() as $book) {
-                    if(sizeof($book->getBorrowings()) == 0) {
+                    if (sizeof($book->getBorrowings()) === 0) {
                         $this->printLine("Title : {$book->getTitle()}");
                         $this->printLine("ISBN : {$book->getISBN()}");
                         $this->printLine("Publishing date : {$book->getPublishingDate()}");
                         $this->separator();
                     }
                 }
+                break;
+
+            case 'c':
+                $book = $this->askQuestion("Enter the book title or id");
+                $this->bookService->getBook($book);
                 break;
 
             case 'e':
@@ -107,14 +112,14 @@ class ConsoleInterface extends Console
                 $author = $this->askQuestion("Enter the author id or name (First name and Last name): ");
 
                 $authorInstance = $this->authorService->getAuthor($author);
-                if(is_null($authorInstance)) {
+                if (is_null($authorInstance)) {
                     $this->printLine("Author not found, please try again.");
                     goto newBook;
                 }
 
                 $book = new Book($id, $isbn, $title, $publishing_date, $authorInstance);
                 $bookService->addBook($book);
-        
+
                 $this->separator();
                 $this->printLine("Your book has been added!");
                 $this->separator();
