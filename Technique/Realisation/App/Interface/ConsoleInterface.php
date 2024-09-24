@@ -99,17 +99,20 @@ class ConsoleInterface extends Console
                 break;
 
             case 'e':
+                newBook:
                 $id = $this->getID();
                 $title = $this->askQuestion("Enter the title: ");
                 $isbn = $this->askQuestion("Enter the ISBN: ");
                 $publishing_date = $this->askQuestion("Enter the publishing date: ");
-                $author = $this->askQuestion("Enter the author: ");
+                $author = $this->askQuestion("Enter the author id or name (First name and Last name): ");
 
                 $authorInstance = $this->authorService->getAuthor($author);
                 if(is_null($authorInstance)) {
-
+                    $this->printLine("Author not found, please try again.");
+                    goto newBook;
                 }
-                $book = new Book($id, $isbn, $title, $publishing_date);
+
+                $book = new Book($id, $isbn, $title, $publishing_date, $authorInstance);
                 $bookService->addBook($book);
         
                 $this->separator();

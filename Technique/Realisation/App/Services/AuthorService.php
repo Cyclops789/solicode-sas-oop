@@ -43,11 +43,8 @@ class AuthorService {
         } else {
             $authorsFiltered = array_filter($authors, function (Author $author) use ($needle) {
                 if(
-                    str_ends_with(strtolower($author->getFirstName()), strtolower($needle)) || 
-                    str_starts_with(strtolower($author->getFirstName()), strtolower($needle)) || 
-
-                    str_ends_with(strtolower($author->getLastName()), strtolower($needle)) || 
-                    str_starts_with(strtolower($author->getLastName()), strtolower($needle))
+                    str_starts_with(strtolower($author->getFirstName()." ".$author->getLastName()), strtolower($needle)) || 
+                    str_ends_with(strtolower($author->getFirstName()." ".$author->getLastName()), strtolower($needle))
                 ) {
                     return true;
                 }
