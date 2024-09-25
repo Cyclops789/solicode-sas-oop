@@ -28,6 +28,11 @@ class BookService {
         $this->bookDAO->addBook($book);
     }
 
+    public function saveBooks()
+    {
+        $this->bookDAO->saveBooks();
+    }
+
     /**
      * @param mixed $needle it can be string or int
      * @return Book[]|null

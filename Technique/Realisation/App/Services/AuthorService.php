@@ -24,11 +24,7 @@ class AuthorService {
         $this->authorDAO->addAuthor($author);
     }
 
-    /**
-     * @param mixed $needle
-     * @return Author[]|null
-     */
-    public function getAuthor(mixed $needle)
+    public function getAuthor(mixed $needle): Author|null
     {
         /** @var Author[] */
         $authors = $this->getAuthors();
@@ -42,7 +38,7 @@ class AuthorService {
             }));
 
             if(sizeof($authorsFiltered) > 0) {
-                return $authorsFiltered;
+                return $authorsFiltered[0];
             }
         } else {
             $authorsFiltered = array_values(array_filter($authors, function (Author $author) use ($needle) {
@@ -56,7 +52,7 @@ class AuthorService {
             }));
 
             if(sizeof($authorsFiltered) > 0) {
-                return $authorsFiltered;
+                return $authorsFiltered[0];
             }
         }
 
