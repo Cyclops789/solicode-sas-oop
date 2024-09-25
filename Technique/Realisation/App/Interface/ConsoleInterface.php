@@ -38,15 +38,15 @@ class ConsoleInterface extends Console
         $this->askQuestion("Enter the letter to continue: ", $this->expect);
 
         switch ($this->value) {
-            case 'a':
+            case '1':
                 $this->enterBooksMode();
                 break;
 
-            case 'b':
+            case '2':
                 $this->enterAuthorsMode();
                 break;
 
-            case 'c':
+            case '3':
                 $this->enterReadersMode();
                 break;
         }
@@ -89,7 +89,7 @@ class ConsoleInterface extends Console
                     $this->printLine("Title : {$book->getTitle()}");
                     $this->printLine("ISBN : {$book->getIsbn()}");
                     $this->printLine("Publishing date : {$book->getPublishingDate()}");
-                    $this->printLine("Availability : ".($this->bookService->isBookBorrowed($book) ? "Not available" : "Available"));
+                    $this->printLine("Availability : " . ($this->bookService->isBookBorrowed($book) ? "Not available" : "Available"));
                     $this->separator();
                 }
                 break;
@@ -141,7 +141,7 @@ class ConsoleInterface extends Console
                     goto searchBookLable;
                 }
 
-                if(sizeof($booksInstances) > 1) {
+                if (sizeof($booksInstances) > 1) {
                     $this->separator();
                     $this->printLine("Found two books");
                 }
@@ -151,7 +151,7 @@ class ConsoleInterface extends Console
                     $this->printLine("Title : {$bookInstance->getTitle()}");
                     $this->printLine("ISBN : {$bookInstance->getISBN()}");
                     $this->printLine("Publishing date : {$bookInstance->getPublishingDate()}");
-                    $this->printLine("Availability : ".($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
+                    $this->printLine("Availability : " . ($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
                     $this->separator();
                 }
                 break;
@@ -176,7 +176,7 @@ class ConsoleInterface extends Console
                 $this->printLine("Book has been added!");
                 $this->separator();
                 break;
-            
+
             case '6':
                 removeBookLable:
                 $book = $this->askQuestion("Enter the book title / id or ISBN");
@@ -186,9 +186,9 @@ class ConsoleInterface extends Console
                     goto removeBookLable;
                 }
 
-                if(sizeof($booksInstances) > 1) {
+                if (sizeof($booksInstances) > 1) {
                     $this->separator();
-                    $this->printLine("We found ".sizeof($booksInstances)." results for your search");
+                    $this->printLine("We found " . sizeof($booksInstances) . " results for your search");
                 }
 
                 $this->separator();
@@ -197,13 +197,13 @@ class ConsoleInterface extends Console
                     $this->printLine("Title : {$bookInstance->getTitle()}");
                     $this->printLine("ISBN : {$bookInstance->getISBN()}");
                     $this->printLine("Publishing date : {$bookInstance->getPublishingDate()}");
-                    $this->printLine("Availability : ".($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
+                    $this->printLine("Availability : " . ($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
                     $this->separator();
                 }
 
                 askIDOfBook:
                 $id = $this->askQuestion("Enter the id of the book");
-                if(!is_numeric($id)) {
+                if (!is_numeric($id)) {
                     $this->printLine("Invalid id please try again.");
                     goto askIDOfBook;
                 }
@@ -216,7 +216,7 @@ class ConsoleInterface extends Console
 
                 $bookRemoved = $this->bookService->removeBook($bookInstance[0]);
 
-                if($bookRemoved) {
+                if ($bookRemoved) {
                     $this->separator();
                     $this->printLine("Book has been removed!");
                     $this->separator();
@@ -237,34 +237,37 @@ class ConsoleInterface extends Console
                     goto editBook;
                 }
 
-                if(sizeof($booksInstances) > 1) {
+                $bookInstance = $booksInstances[0];
+
+                if (sizeof($booksInstances) > 1) {
                     $this->separator();
-                    $this->printLine("We found ".sizeof($booksInstances)." results for your search");
-                }
+                    $this->printLine("We found " . sizeof($booksInstances) . " results for your search");
 
-                $this->separator();
-                foreach ($booksInstances as $bookInstance) {
-                    $this->printLine("ID : {$bookInstance->getID()}");
-                    $this->printLine("Title : {$bookInstance->getTitle()}");
-                    $this->printLine("ISBN : {$bookInstance->getISBN()}");
-                    $this->printLine("Publishing date : {$bookInstance->getPublishingDate()}");
-                    $this->printLine("Availability : ".($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
                     $this->separator();
-                }
+                    foreach ($booksInstances as $bookInstance) {
+                        $this->printLine("ID : {$bookInstance->getID()}");
+                        $this->printLine("Title : {$bookInstance->getTitle()}");
+                        $this->printLine("ISBN : {$bookInstance->getISBN()}");
+                        $this->printLine("Publishing date : {$bookInstance->getPublishingDate()}");
+                        $this->printLine("Availability : " . ($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
+                        $this->separator();
+                    }
 
-                askIDOfBookEdit:
-                $id = $this->askQuestion("Enter the id of the book");
-                if(!is_numeric($id)) {
-                    $this->printLine("Invalid id please try again.");
-                    goto askIDOfBookEdit;
-                }
+                    askIDOfBookEdit:
+                    $id = $this->askQuestion("Enter the id of the book");
+                    if (!is_numeric($id)) {
+                        $this->printLine("Invalid id please try again.");
+                        goto askIDOfBookEdit;
+                    }
 
-                $bookInstance = $this->bookService->getBook($id);
-                if (is_null($bookInstance)) {
-                    $this->printLine("Book not found, please try again.");
-                    goto askIDOfBookEdit;
+                    $bookInstance = $this->bookService->getBook($id);
+                    if (is_null($bookInstance)) {
+                        $this->printLine("Book not found, please try again.");
+                        goto askIDOfBookEdit;
+                    }
+
+                    $bookInstance = $bookInstance[0];
                 }
-                $bookInstance = $bookInstance[0];
 
                 editBookForm:
                 $this->expect = ['1', '2', '3', '4'];
@@ -300,7 +303,7 @@ class ConsoleInterface extends Console
                         $bookInstance->setAuthor($authorsInstances);
                         break;
                 }
-                
+
                 $this->bookService->saveBooks();
 
                 $this->separator();
@@ -311,7 +314,7 @@ class ConsoleInterface extends Console
             default:
                 return;
         }
-        
+
         $this->askQuestion("");
         $this->enterBooksMode();
     }

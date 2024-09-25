@@ -91,7 +91,7 @@ class BookService {
         }));
         
         if(sizeof($restOfBooks) > 0) {
-            $this->bookDAO->setBooks($restOfBooks);
+            $this->bookDAO->saveBooks($restOfBooks);
             return true;
         }
 
