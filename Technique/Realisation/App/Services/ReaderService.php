@@ -24,24 +24,28 @@ class ReaderService {
         $this->readerDAO->addReader($reader);
     }
 
-    public function getReader(mixed $needle): Reader|null
+    /**
+     * @param mixed $needle
+     * @return Reader[]|null
+     */
+    public function getReader(mixed $needle)
     {
         /** @var Reader[] */
         $readers = $this->getReaders();
 
         if(is_numeric($needle)) {
-            $readersFiltered = array_filter($readers, function (Reader $reader) use ($needle) {
+            $readersFiltered = array_values(array_filter($readers, function (Reader $reader) use ($needle) {
                 if($reader->getId() === (int) $needle) {
                     return true;
                 }
                 return false;
-            });
+            }));
 
             if(sizeof($readersFiltered) > 0) {
-                return $readersFiltered[0];
+                return $readersFiltered;
             }
         } else {
-            $readersFiltered = array_filter($readers, function (Reader $reader) use ($needle) {
+            $readersFiltered = array_values(array_filter($readers, function (Reader $reader) use ($needle) {
                 if(
                     str_starts_with(strtolower($reader->getFirstName()." ".$reader->getLastName()), strtolower($needle)) || 
                     str_ends_with(strtolower($reader->getFirstName()." ".$reader->getLastName()), strtolower($needle))
@@ -49,10 +53,10 @@ class ReaderService {
                     return true;
                 }
                 return false;
-            });
+            }));
 
             if(sizeof($readersFiltered) > 0) {
-                return $readersFiltered[0];
+                return $readersFiltered;
             }
         }
 

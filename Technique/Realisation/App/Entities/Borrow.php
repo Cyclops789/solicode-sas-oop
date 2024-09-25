@@ -24,7 +24,6 @@ class Borrow
         $this->reader = $reader;
     }
 
-
     /**
      * Get the value of id
      */ 

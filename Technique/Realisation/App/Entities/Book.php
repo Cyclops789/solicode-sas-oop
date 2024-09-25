@@ -2,13 +2,15 @@
 
 namespace App\Entities;
 
+use APp\Entities\Author;
+
 class Book
 {
     private $id;
     private $isbn;
     private $title;
     private $publishing_date;
-    private $author;
+    private Author $author;
 
     public function __construct($isbn, $title, $publishing_date, $author, $borrowings = [])
     {
@@ -95,6 +97,26 @@ class Book
     public function setPublishingDate($publishing_date)
     {
         $this->publishing_date = $publishing_date;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of isbn
+     */ 
+    public function getIsbn()
+    {
+        return $this->isbn;
+    }
+
+    /**
+     * Set the value of isbn
+     *
+     * @return  self
+     */ 
+    public function setIsbn($isbn)
+    {
+        $this->isbn = $isbn;
 
         return $this;
     }

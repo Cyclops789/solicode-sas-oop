@@ -24,24 +24,28 @@ class AuthorService {
         $this->authorDAO->addAuthor($author);
     }
 
-    public function getAuthor(mixed $needle): Author|null
+    /**
+     * @param mixed $needle
+     * @return Author[]|null
+     */
+    public function getAuthor(mixed $needle)
     {
         /** @var Author[] */
         $authors = $this->getAuthors();
 
         if(is_numeric($needle)) {
-            $authorsFiltered = array_filter($authors, function (Author $author) use ($needle) {
+            $authorsFiltered = array_values(array_filter($authors, function (Author $author) use ($needle) {
                 if($author->getId() === (int) $needle) {
                     return true;
                 }
                 return false;
-            });
+            }));
 
             if(sizeof($authorsFiltered) > 0) {
-                return $authorsFiltered[0];
+                return $authorsFiltered;
             }
         } else {
-            $authorsFiltered = array_filter($authors, function (Author $author) use ($needle) {
+            $authorsFiltered = array_values(array_filter($authors, function (Author $author) use ($needle) {
                 if(
                     str_starts_with(strtolower($author->getFirstName()." ".$author->getLastName()), strtolower($needle)) || 
                     str_ends_with(strtolower($author->getFirstName()." ".$author->getLastName()), strtolower($needle))
@@ -49,10 +53,10 @@ class AuthorService {
                     return true;
                 }
                 return false;
-            });
+            }));
 
             if(sizeof($authorsFiltered) > 0) {
-                return $authorsFiltered[0];
+                return $authorsFiltered;
             }
         }
 

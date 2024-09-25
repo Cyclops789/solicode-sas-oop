@@ -2,35 +2,45 @@
 
 namespace App\Managers;
 
-abstract class Console {
+enum Colors: string
+{
+    case YELLOW = "\e[93m";
+    case BLUE = "\e[34m";
+    case RED = "\e[91m";
+    case GREEN = "\e[32m";
+    case DEFAULT = "\e[39m";
+}
+
+abstract class Console
+{
     protected string $value;
     protected array $expect;
 
     public function separator()
     {
-        $this->printLine("-----------------------------------------------------");
+        $this->printLine("#################################################", "blue");
     }
 
-    public function askQuestion(string $question, array $expect = []): string 
+    public function askQuestion(string $question, array $expect = []): string
     {
-        $this->printLine($question);
+        $this->printLine($question, "yellow");
         $this->value = trim(fgets(STDIN));
 
-        if($this->value === 'exit') {
+        if ($this->value === 'exit') {
             die(0);
         }
 
         // verify the inputs
-        if(sizeof($expect) > 0) {
+        if (sizeof($expect) > 0) {
             $expect = [...$expect, 'back'];
             $found = false;
             foreach ($expect as $expected) {
-                if($this->value === $expected) {
+                if ($this->value === $expected) {
                     $found = true;
                 }
             }
-    
-            if(!$found) {
+
+            if (!$found) {
                 die("Invalid value");
             }
         }
@@ -43,9 +53,22 @@ abstract class Console {
         echo "\033[2J\033[;H";
     }
 
-    public function printLine(string $line) 
+    /**
+     * @param string $line
+     * @param string $color default, yellow, blue, red, green
+     * @return void
+     */
+    public function printLine(string $line, string $color = "default")
     {
-        echo $line."\n";
+        $colorValue = match ($color) {
+            "red" => Colors::RED->value,
+            "blue" => Colors::BLUE->value,
+            "yellow" => Colors::YELLOW->value,
+            "green" => Colors::GREEN->value,
+            default => Colors::DEFAULT ->value,
+        };
+
+        echo $colorValue . $line . "\n" . Colors::DEFAULT ->value;
     }
 
     public static function getID(): int
@@ -55,8 +78,8 @@ abstract class Console {
 
     public static function getDate(int $addDays = 0): string
     {
-        if($addDays > 0) {
-            return date("F j, Y, g:i a", strtotime(date("F j, Y, g:i a")." + {$addDays} days"));    
+        if ($addDays > 0) {
+            return date("F j, Y, g:i a", strtotime(date("F j, Y, g:i a") . " + {$addDays} days"));
         }
         return date("F j, Y, g:i a");
     }

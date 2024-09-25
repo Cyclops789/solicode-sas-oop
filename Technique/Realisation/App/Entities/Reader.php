@@ -11,8 +11,6 @@ class Reader
     private $first_name;
     private $last_name;
     private $address;
-    /** @var Borrow[] */
-    private $borrowings = [];
 
     public function __construct($card_number, $first_name, $last_name, $borrowings = [])
     {
@@ -20,27 +18,6 @@ class Reader
         $this->card_number = $card_number;
         $this->first_name = $first_name;
         $this->last_name = $last_name;
-        $this->borrowings = $borrowings;
-    }
-    
-    /**
-     * Get the value of borrowings
-     */ 
-    public function getBorrowings()
-    {
-        return $this->borrowings;
-    }
-
-    /**
-     * Set the value of borrowings
-     *
-     * @return  self
-     */ 
-    public function setBorrowings($borrowings)
-    {
-        $this->borrowings = $borrowings;
-
-        return $this;
     }
 
     /**

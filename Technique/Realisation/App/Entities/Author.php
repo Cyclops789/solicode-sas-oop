@@ -8,7 +8,6 @@ class Author
     private $first_name;
     private $last_name;
     private $nationality;
-    private $books = [];
 
     public function __construct($first_name, $last_name, $nationality, $books = [])
     {
@@ -16,27 +15,6 @@ class Author
         $this->first_name = $first_name; 
         $this->last_name = $last_name;
         $this->nationality = $nationality;
-        $this->books = $books;
-    }
-
-    /**
-     * Get the value of books
-     */ 
-    public function getBooks()
-    {
-        return $this->books;
-    }
-
-    /**
-     * Set the value of books
-     *
-     * @return  self
-     */ 
-    public function setBooks($books)
-    {
-        $this->books = $books;
-
-        return $this;
     }
 
     /**
