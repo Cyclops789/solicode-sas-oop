@@ -11,9 +11,9 @@ class Reader
     private $address;
     private $borrowings = [];
 
-    public function __construct($id, $card_number, $first_name, $last_name, $borrowings = [])
+    public function __construct($card_number, $first_name, $last_name, $borrowings = [])
     {
-        $this->id = $id;
+        $this->id = time();
         $this->card_number = $card_number;
         $this->first_name = $first_name;
         $this->last_name = $last_name;

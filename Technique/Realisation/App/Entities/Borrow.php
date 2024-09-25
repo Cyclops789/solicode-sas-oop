@@ -12,9 +12,9 @@ class Borrow
     private $actual_return_date;
     private Book $book;
 
-    public function __construct($id, $borrowed_date, $expected_return_date, $actual_return_date, $book)
+    public function __construct($borrowed_date, $expected_return_date, $actual_return_date, $book)
     {
-        $this->id = $id;
+        $this->id = time();
         $this->borrowed_date = $borrowed_date;
         $this->expected_return_date = $expected_return_date;
         $this->actual_return_date = $actual_return_date;

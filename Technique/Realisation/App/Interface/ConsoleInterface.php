@@ -2,6 +2,7 @@
 
 namespace App\Interface;
 
+use App\Entities\Borrow;
 use App\Managers\Console;
 use App\Entities\Book;
 use App\Services\BookService;
@@ -49,6 +50,8 @@ class ConsoleInterface extends Console
                 $this->enterReadersMode();
                 break;
         }
+
+        new self();
     }
 
     public function enterAuthorsMode(): void
@@ -99,8 +102,15 @@ class ConsoleInterface extends Console
                 break;
 
             case 'c':
+                borrowBook:
                 $book = $this->askQuestion("Enter the book title or id");
-                $this->bookService->getBook($book);
+                $bookInstance = $this->bookService->getBook($book);
+                if(is_null($bookInstance)) {
+                    $this->printLine("Book not found, please try again.");
+                    goto borrowBook;
+                }
+                $borrow = new Borrow();
+                $this->borrowService->addBorrowing();
                 break;
 
             case 'e':
@@ -117,7 +127,7 @@ class ConsoleInterface extends Console
                     goto newBook;
                 }
 
-                $book = new Book($id, $isbn, $title, $publishing_date, $authorInstance);
+                $book = new Book($isbn, $title, $publishing_date, $authorInstance);
                 $bookService->addBook($book);
 
                 $this->separator();
