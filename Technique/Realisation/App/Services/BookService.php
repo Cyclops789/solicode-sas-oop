@@ -3,25 +3,29 @@
 namespace App\Services;
 
 use App\DataAccess\BookDAO;
+use App\DataAccess\BorrowDAO;
+use App\Entities\Borrow;
 use App\Entities\Book;
 
 class BookService {
 
-    private BookDAO $book;
+    private BookDAO $bookDAO;
+    private BorrowDAO $borrowDAO;
 
     public function __construct()
     {
-        $this->book = new BookDAO();
+        $this->bookDAO = new BookDAO();
+        $this->borrowDAO = new BorrowDAO();
     }
 
     public function getBooks()
     {
-        return $this->book->getBooks();
+        return $this->bookDAO->getBooks();
     }
 
     public function addBook(Book $book)
     {
-        $this->book->addBook($book);
+        $this->bookDAO->addBook($book);
     }
 
     public function getBook(mixed $needle): Book|null
@@ -59,4 +63,33 @@ class BookService {
         return null;
     }
 
+    /**
+     * Summary of getAvailableBooks
+     * @return Book[]
+     */
+    public function getAvailableBooks()
+    {
+        /** @var Borrow[] */
+        $borrowings = $this->borrowDAO->getBorrowings();
+        $allBorrowedBooksIDs = array_flip(array_map(fn (Borrow $borrow) => $borrow->getBook()->getId(), $borrowings));
+        
+        return array_filter($this->getBooks(), function (Book $book) use ($allBorrowedBooksIDs) {
+            if(isset($allBorrowedBooksIDs[$book->getID()])) {
+                return false;
+            }
+            return true;
+        });
+    }
+
+    public function isBookBorrowed(Book $book): bool
+    {
+        /** @var Borrow[] */
+        $borrowings = $this->borrowDAO->getBorrowings();
+        $allBorrowedBooksIDs = array_flip(array_map(fn (Borrow $borrow) => $borrow->getBook()->getId(), $borrowings));
+        if(isset($allBorrowedBooksIDs[$book->getID()])) {
+            return true;
+        }
+        
+        return false;
+    }
 }

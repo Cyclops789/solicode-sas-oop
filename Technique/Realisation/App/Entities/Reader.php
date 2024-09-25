@@ -2,6 +2,8 @@
 
 namespace App\Entities;
 
+use App\Entities\Borrow;
+
 class Reader
 {
     private $id;
@@ -9,6 +11,7 @@ class Reader
     private $first_name;
     private $last_name;
     private $address;
+    /** @var Borrow[] */
     private $borrowings = [];
 
     public function __construct($card_number, $first_name, $last_name, $borrowings = [])

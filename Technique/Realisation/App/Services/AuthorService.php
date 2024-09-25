@@ -7,21 +7,21 @@ use App\Entities\Author;
 
 class AuthorService {
 
-    private AuthorDAO $author;
+    private AuthorDAO $authorDAO;
 
     public function __construct()
     {
-        $this->author = new AuthorDAO();
+        $this->authorDAO = new AuthorDAO();
     }
 
     public function getAuthors()
     {
-        return $this->author->getAuthors();
+        return $this->authorDAO->getAuthors();
     }
 
     public function addAuthor(Author $author)
     {
-        $this->author->addAuthor($author);
+        $this->authorDAO->addAuthor($author);
     }
 
     public function getAuthor(mixed $needle): Author|null

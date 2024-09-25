@@ -53,8 +53,11 @@ abstract class Console {
         return random_int(1000, 9999);
     }
 
-    public static function getDate(): string
+    public static function getDate(int $addDays = 0): string
     {
+        if($addDays > 0) {
+            return date("F j, Y, g:i a", strtotime(date("F j, Y, g:i a")." + {$addDays} days"));    
+        }
         return date("F j, Y, g:i a");
     }
 }

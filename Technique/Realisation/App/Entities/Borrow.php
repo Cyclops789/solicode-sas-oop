@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use App\Entities\Book;
+use App\Entities\Reader;
 
 class Borrow
 {
@@ -10,15 +11,17 @@ class Borrow
     private $borrowed_date;
     private $expected_return_date;
     private $actual_return_date;
+    private Reader $reader;
     private Book $book;
 
-    public function __construct($borrowed_date, $expected_return_date, $actual_return_date, $book)
+    public function __construct($borrowed_date, $expected_return_date, $actual_return_date, $reader, $book)
     {
         $this->id = time();
         $this->borrowed_date = $borrowed_date;
         $this->expected_return_date = $expected_return_date;
         $this->actual_return_date = $actual_return_date;
         $this->book = $book;
+        $this->reader = $reader;
     }
 
 
@@ -118,6 +121,26 @@ class Borrow
     public function setBook($book)
     {
         $this->book = $book;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of reader
+     */ 
+    public function getReader()
+    {
+        return $this->reader;
+    }
+
+    /**
+     * Set the value of reader
+     *
+     * @return  self
+     */ 
+    public function setReader($reader)
+    {
+        $this->reader = $reader;
 
         return $this;
     }

@@ -7,21 +7,21 @@ use App\Entities\Borrow;
 
 class BorrowService {
 
-    private BorrowDAO $borrow;
+    private BorrowDAO $borrowDAO;
 
     public function __construct()
     {
-        $this->borrow = new BorrowDAO();
+        $this->borrowDAO = new BorrowDAO();
     }
 
     public function getBorrowings()
     {
-        return $this->borrow->getBorrowings();
+        return $this->borrowDAO->getBorrowings();
     }
 
     public function addBorrowing(Borrow $borrow)
     {
-        $this->borrow->addBorrowing($borrow);
+        $this->borrowDAO->addBorrowing($borrow);
     }
 
     public function getBorrowing(mixed $needle): Borrow|null

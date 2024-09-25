@@ -9,7 +9,6 @@ class Book
     private $title;
     private $publishing_date;
     private $author;
-    private $borrowings = [];
 
     public function __construct($isbn, $title, $publishing_date, $author, $borrowings = [])
     {
@@ -18,7 +17,6 @@ class Book
         $this->title = $title;
         $this->publishing_date = $publishing_date;
         $this->author = $author;
-        $this->borrowings = $borrowings;
     }
 
     /**
@@ -97,26 +95,6 @@ class Book
     public function setPublishingDate($publishing_date)
     {
         $this->publishing_date = $publishing_date;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of borrowings
-     */
-    public function getBorrowings()
-    {
-        return $this->borrowings;
-    }
-
-    /**
-     * Set the value of borrowings
-     *
-     * @return  self
-     */
-    public function setBorrowings($borrowings)
-    {
-        $this->borrowings = $borrowings;
 
         return $this;
     }

@@ -7,21 +7,21 @@ use App\Entities\Reader;
 
 class ReaderService {
 
-    private ReaderDAO $reader;
+    private ReaderDAO $readerDAO;
 
     public function __construct()
     {
-        $this->reader = new ReaderDAO();
+        $this->readerDAO = new ReaderDAO();
     }
 
     public function getReaders()
     {
-        return $this->reader->getReaders();
+        return $this->readerDAO->getReaders();
     }
 
     public function addReader(Reader $reader)
     {
-        $this->reader->addReader($reader);
+        $this->readerDAO->addReader($reader);
     }
 
     public function getReader(mixed $needle): Reader|null
@@ -43,10 +43,8 @@ class ReaderService {
         } else {
             $readersFiltered = array_filter($readers, function (Reader $reader) use ($needle) {
                 if(
-                    str_ends_with(strtolower($reader->getFirstName()), strtolower($needle)) || 
-                    str_starts_with(strtolower($reader->getFirstName()), strtolower($needle)) || 
-                    str_ends_with(strtolower($reader->getLastName()), strtolower($needle)) || 
-                    str_starts_with(strtolower($reader->getLastName()), strtolower($needle))
+                    str_starts_with(strtolower($reader->getFirstName()." ".$reader->getLastName()), strtolower($needle)) || 
+                    str_ends_with(strtolower($reader->getFirstName()." ".$reader->getLastName()), strtolower($needle))
                 ) {
                     return true;
                 }

@@ -91,26 +91,56 @@ class ConsoleInterface extends Console
 
             case 'b':
                 $this->separator();
-                foreach ($bookService->getBooks() as $book) {
-                    if (sizeof($book->getBorrowings()) === 0) {
-                        $this->printLine("Title : {$book->getTitle()}");
-                        $this->printLine("ISBN : {$book->getISBN()}");
-                        $this->printLine("Publishing date : {$book->getPublishingDate()}");
-                        $this->separator();
-                    }
+                foreach ($bookService->getAvailableBooks() as $book) {
+                    $this->printLine("Title : {$book->getTitle()}");
+                    $this->printLine("ISBN : {$book->getISBN()}");
+                    $this->printLine("Publishing date : {$book->getPublishingDate()}");
+                    $this->separator();
                 }
                 break;
 
             case 'c':
-                borrowBook:
+                borrowBookLable:
                 $book = $this->askQuestion("Enter the book title or id");
                 $bookInstance = $this->bookService->getBook($book);
-                if(is_null($bookInstance)) {
+                if (is_null($bookInstance)) {
                     $this->printLine("Book not found, please try again.");
-                    goto borrowBook;
+                    goto borrowBookLable;
                 }
-                $borrow = new Borrow();
-                $this->borrowService->addBorrowing();
+
+                borrowReaderLable:
+                $reader = $this->askQuestion("Enter the reader id or name (First name and Last name): ");
+                $readerInstance = $this->readerService->getReader($reader);
+                if (is_null($readerInstance)) {
+                    $this->printLine("Reader not found, please try again.");
+                    goto borrowReaderLable;
+                }
+
+                $returnDate = (int) $this->askQuestion("Enter how many days are you going to borrow it");
+
+                $borrow = new Borrow($this->getDate(), $this->getDate($returnDate), null, $readerInstance, $bookInstance);
+                $this->borrowService->addBorrowing($borrow);
+
+                $this->separator();
+                $this->printLine("Borrowing has been added!");
+                $this->separator();
+                break;
+
+            case 'd':
+                searchBookLable:
+                $book = $this->askQuestion("Enter the book title or id");
+                $bookInstance = $this->bookService->getBook($book);
+                if (is_null($bookInstance)) {
+                    $this->printLine("Book not found, please try again.");
+                    goto searchBookLable;
+                }
+
+                $this->separator();
+                $this->printLine("Title : {$bookInstance->getTitle()}");
+                $this->printLine("ISBN : {$bookInstance->getISBN()}");
+                $this->printLine("Publishing date : {$bookInstance->getPublishingDate()}");
+                $this->printLine("Availability : ".($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
+                $this->separator();
                 break;
 
             case 'e':
