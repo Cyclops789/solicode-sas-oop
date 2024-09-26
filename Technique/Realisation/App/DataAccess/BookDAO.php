@@ -25,8 +25,13 @@ class BookDAO
         $this->database->saveData();
     }
 
-    public function saveBooks(): void
+    /**
+     * @param Book[] $books
+     * @return void
+     */
+    public function setBooks($books): void
     {
+        $this->database->books = $books;
         $this->database->saveData();
     }
 }

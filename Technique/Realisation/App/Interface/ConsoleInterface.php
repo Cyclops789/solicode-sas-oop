@@ -302,9 +302,12 @@ class ConsoleInterface extends Console
                         }
                         $bookInstance->setAuthor($authorsInstances);
                         break;
+
+                    default:
+                        goto editBookForm;
                 }
 
-                $this->bookService->saveBooks();
+                $this->bookService->editBook($bookInstance);
 
                 $this->separator();
                 $this->printLine("Book has been saved!");

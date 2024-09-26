@@ -7,7 +7,8 @@ use App\DataAccess\BorrowDAO;
 use App\Entities\Borrow;
 use App\Entities\Book;
 
-class BookService {
+class BookService
+{
 
     private BookDAO $bookDAO;
     private BorrowDAO $borrowDAO;
@@ -28,35 +29,30 @@ class BookService {
         $this->bookDAO->addBook($book);
     }
 
-    public function saveBooks()
-    {
-        $this->bookDAO->saveBooks();
-    }
-
     /**
      * @param mixed $needle it can be string or int
      * @return Book[]|null
      */
-    public function getBook(mixed $needle)
+    public function getBook(mixed $needle, bool $onlyIndex = false)
     {
         /** @var Book[] */
         $books = $this->getBooks();
 
-        if(is_numeric($needle)) {
+        if (is_numeric($needle)) {
             $bookFiltered = array_values(array_filter($books, function (Book $book) use ($needle) {
-                if($book->getId() === (int) $needle) {
+                if ($book->getId() === (int) $needle) {
                     return true;
                 }
                 return false;
             }));
 
-            if(sizeof($bookFiltered) > 0) {
+            if (sizeof($bookFiltered) > 0) {
                 return $bookFiltered;
             }
         } else {
             $bookFiltered = array_values(array_filter($books, function (Book $book) use ($needle) {
-                if(
-                    str_ends_with(strtolower($book->getTitle()), strtolower($needle)) || 
+                if (
+                    str_ends_with(strtolower($book->getTitle()), strtolower($needle)) ||
                     str_starts_with(strtolower($book->getTitle()), strtolower($needle)) ||
                     strtolower($book->getISBN()) === strtolower($needle)
                 ) {
@@ -65,7 +61,7 @@ class BookService {
                 return false;
             }));
 
-            if(sizeof($bookFiltered) > 0) {
+            if (sizeof($bookFiltered) > 0) {
                 return $bookFiltered;
             }
         }
@@ -84,14 +80,38 @@ class BookService {
 
         /** @var Book[] */
         $restOfBooks = array_values(array_filter($books, function (Book $bookInstance) use ($book) {
-            if($bookInstance->getId() === $book->getId()) {
+            if ($bookInstance->getId() === $book->getId()) {
                 return false;
             }
             return true;
         }));
-        
-        if(sizeof($restOfBooks) > 0) {
-            $this->bookDAO->saveBooks($restOfBooks);
+
+        if (sizeof($restOfBooks) > 0) {
+            $this->bookDAO->setBooks($restOfBooks);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Book $book the edited instance of the book
+     * @return void
+     */
+    public function editBook(Book $book): bool
+    {
+        $books = $this->getBooks();
+
+        /** @var Book[] */
+        $restOfBooks = array_values(array_filter($books, function (Book $bookInstance) use ($book) {
+            if ($bookInstance->getId() === $book->getId()) {
+                return false;
+            }
+            return true;
+        }));
+
+        if (sizeof($restOfBooks) > 0) {
+            $this->bookDAO->setBooks([...$restOfBooks, $book]);
             return true;
         }
 
@@ -105,10 +125,10 @@ class BookService {
     {
         /** @var Borrow[] */
         $borrowings = $this->borrowDAO->getBorrowings();
-        $allBorrowedBooksIDs = array_flip(array_map(fn (Borrow $borrow) => $borrow->getBook()->getId(), $borrowings));
-        
+        $allBorrowedBooksIDs = array_flip(array_map(fn(Borrow $borrow) => $borrow->getBook()->getId(), $borrowings));
+
         return array_values(array_filter($this->getBooks(), function (Book $book) use ($allBorrowedBooksIDs) {
-            if(isset($allBorrowedBooksIDs[$book->getID()])) {
+            if (isset($allBorrowedBooksIDs[$book->getID()])) {
                 return false;
             }
             return true;
@@ -119,8 +139,8 @@ class BookService {
     {
         /** @var Borrow[] */
         $borrowings = $this->borrowDAO->getBorrowings();
-        $allBorrowedBooksIDs = array_flip(array_map(fn (Borrow $borrow) => $borrow->getBook()->getId(), $borrowings));
-        if(isset($allBorrowedBooksIDs[$book->getID()])) {
+        $allBorrowedBooksIDs = array_flip(array_map(fn(Borrow $borrow) => $borrow->getBook()->getId(), $borrowings));
+        if (isset($allBorrowedBooksIDs[$book->getID()])) {
             return true;
         }
 
