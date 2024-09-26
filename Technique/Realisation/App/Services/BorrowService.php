@@ -6,7 +6,6 @@ use App\DataAccess\BorrowDAO;
 use App\Entities\Borrow;
 
 class BorrowService {
-
     private BorrowDAO $borrowDAO;
 
     public function __construct()
@@ -24,10 +23,6 @@ class BorrowService {
         $this->borrowDAO->addBorrowing($borrow);
     }
 
-    /**
-     * @param mixed $needle
-     * @return Borrow[]|null
-     */
     public function getBorrowing(mixed $needle)
     {
         return $this->borrowDAO->getBorrowing($needle);

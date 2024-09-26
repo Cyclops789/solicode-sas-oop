@@ -35,41 +35,19 @@ class ReaderDAO
         $this->database->saveData();
     }
 
-    /**
-     * @param mixed $needle
-     * @return Reader[]|null
-     */
-    public function getReader(mixed $needle)
+    public function getReader(mixed $needle): Reader|null
     {
         /** @var Reader[] */
         $readers = $this->getReaders();
-
-        if(is_numeric($needle)) {
-            $readersFiltered = array_values(array_filter($readers, function (Reader $reader) use ($needle) {
-                if($reader->getId() === (int) $needle) {
-                    return true;
-                }
-                return false;
-            }));
-
-            if(sizeof($readersFiltered) > 0) {
-                return $readersFiltered;
+        $readersFiltered = array_values(array_filter($readers, function (Reader $reader) use ($needle) {
+            if ($reader->getId() === (int) $needle) {
+                return true;
             }
-        } else {
-            $readersFiltered = array_values(array_filter($readers, function (Reader $reader) use ($needle) {
-                if(
-                    str_starts_with(strtolower($reader->getFirstName()." ".$reader->getLastName()), strtolower($needle)) || 
-                    str_ends_with(strtolower($reader->getFirstName()." ".$reader->getLastName()), strtolower($needle)) ||
-                    strtoupper($reader->getCardNumber()) === strtoupper($needle)
-                ) {
-                    return true;
-                }
-                return false;
-            }));
+            return false;
+        }));
 
-            if(sizeof($readersFiltered) > 0) {
-                return $readersFiltered;
-            }
+        if (sizeof($readersFiltered) > 0) {
+            return $readersFiltered[0];
         }
 
         return null;
@@ -102,7 +80,7 @@ class ReaderDAO
 
     /**
      * @param Reader $reader the edited instance of the book
-     * @return void
+     * @return bool
      */
     public function editReader(Reader $reader): bool
     {

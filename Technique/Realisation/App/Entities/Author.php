@@ -9,7 +9,7 @@ class Author
     private $last_name;
     private $nationality;
 
-    public function __construct($first_name, $last_name, $nationality, $books = [])
+    public function __construct($first_name, $last_name, $nationality)
     {
         $this->id = time();
         $this->first_name = $first_name; 

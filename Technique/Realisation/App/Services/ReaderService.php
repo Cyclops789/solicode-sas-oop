@@ -27,10 +27,6 @@ class ReaderService {
         $this->readerDAO->addReader($reader);
     }
 
-    /**
-     * @param mixed $needle
-     * @return Reader[]|null
-     */
     public function getReader(mixed $needle)
     {
         return $this->readerDAO->getReader($needle); 
@@ -48,7 +44,7 @@ class ReaderService {
 
     /**
      * @param Reader $reader the edited instance of the book
-     * @return void
+     * @return bool
      */
     public function editReader(Reader $reader): bool
     {

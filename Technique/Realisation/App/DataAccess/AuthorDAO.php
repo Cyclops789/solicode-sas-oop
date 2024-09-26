@@ -39,34 +39,65 @@ class AuthorDAO
     {
         /** @var Author[] */
         $authors = $this->getAuthors();
-
-        if(is_numeric($needle)) {
-            $authorsFiltered = array_values(array_filter($authors, function (Author $author) use ($needle) {
-                if($author->getId() === (int) $needle) {
-                    return true;
-                }
-                return false;
-            }));
-
-            if(sizeof($authorsFiltered) > 0) {
-                return $authorsFiltered[0];
+        $authorsFiltered = array_values(array_filter($authors, function (Author $author) use ($needle) {
+            if ($author->getId() === (int) $needle) {
+                return true;
             }
-        } else {
-            $authorsFiltered = array_values(array_filter($authors, function (Author $author) use ($needle) {
-                if(
-                    str_starts_with(strtolower($author->getFirstName()." ".$author->getLastName()), strtolower($needle)) || 
-                    str_ends_with(strtolower($author->getFirstName()." ".$author->getLastName()), strtolower($needle))
-                ) {
-                    return true;
-                }
-                return false;
-            }));
+            return false;
+        }));
 
-            if(sizeof($authorsFiltered) > 0) {
-                return $authorsFiltered[0];
-            }
+        if (sizeof($authorsFiltered) > 0) {
+            return $authorsFiltered[0];
         }
 
         return null;
+    }
+
+    /**
+     * 
+     * @param Author $book
+     * @return bool true if the book were found and removed, false if the book wasnt found
+     */
+    public function removeAuthor(Author $author): bool
+    {
+        $authors = $this->getAuthors();
+        /** @var Author[] */
+        $restOfAuthors = array_values(array_filter($authors, function (Author $authorInstance) use ($author) {
+            if ($authorInstance->getId() === $author->getId()) {
+                return false;
+            }
+            return true;
+        }));
+
+        if (sizeof($restOfAuthors) > 0) {
+            $this->setAuthors($restOfAuthors);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Author $author the edited instance of the book
+     * @return bool
+     */
+    public function editAuthor(Author $author): bool
+    {
+        $readers = $this->getAuthors();
+
+        /** @var Author[] */
+        $restOfAuthors = array_values(array_filter($readers, function (Author $authorInstance) use ($author) {
+            if ($authorInstance->getId() === $author->getId()) {
+                return false;
+            }
+            return true;
+        }));
+
+        if (sizeof($restOfAuthors) > 0) {
+            $this->setAuthors([...$restOfAuthors, $author]);
+            return true;
+        }
+
+        return false;
     }
 }

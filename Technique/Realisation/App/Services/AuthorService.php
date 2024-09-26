@@ -27,8 +27,18 @@ class AuthorService {
         $this->authorDAO->addAuthor($author);
     }
 
-    public function getAuthor(mixed $needle): Author|null
+    public function getAuthor(mixed $needle)
     {
-        return $this->getAuthor($needle);
+        return $this->authorDAO->getAuthor($needle);
+    }
+
+    public function removeAuthor(Author $author)
+    {
+        return $this->authorDAO->removeAuthor($author);
+    }
+
+    public function editAuthor(Author $author)
+    {
+        return $this->authorDAO->editAuthor($author);
     }
 }

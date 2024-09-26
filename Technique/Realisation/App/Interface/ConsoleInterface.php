@@ -2,6 +2,7 @@
 
 namespace App\Interface;
 
+use App\Entities\Author;
 use App\Entities\Borrow;
 use App\Entities\Reader;
 use App\Managers\Console;
@@ -82,139 +83,80 @@ class ConsoleInterface extends Console
             case '2':
                 $firstName = $this->askQuestion("Enter the first name: ");
                 $lastName = $this->askQuestion("Enter the last name: ");
+                $nationality = $this->askQuestion("Enter the nationality: ");
 
-                $reader = new Reader($firstName, $lastName);
-                $this->readerService->addReader($reader);
+                $author = new Author($firstName, $lastName, $nationality);
+                $this->authorService->addAuthor($author);
 
                 $this->separator();
-                $this->printLine("Reader has been added!");
+                $this->printLine("Author has been added!");
                 $this->separator();
                 break;
 
             case '3':
-                removeReaderLable:
-                $reader = $this->askQuestion("Enter the reader id / card number or name (First name and Last name): ");
-                $readersInstances = $this->readerService->getReader($reader);
+                removeAuthorLable:
+                $author = $this->askQuestion("Enter the author id : ");
+                $authorInstance = $this->authorService->getAuthor($author);
 
-                if (is_null($readersInstances)) {
-                    $this->printLine("Reader not found, please try again.");
-                    goto removeReaderLable;
+                if (is_null($authorsInstances)) {
+                    $this->printLine("Author not found, please try again.");
+                    goto removeAuthorLable;
                 }
 
-                if (sizeof($readersInstances) > 1) {
-                    $this->separator();
-                    $this->printLine("We found " . sizeof($readersInstances) . " results for your search");
-                    
-                    $this->separator();
-                    foreach ($readersInstances as $reader) {
-                        $this->printLine("First name : {$reader->getFirstName()}");
-                        $this->printLine("Last name : {$reader->getLastName()}");
-                        $this->printLine("Card number : {$reader->getCardNumber()}");
-                        $this->separator();
-                    }
-
-                    askIDOfReader:
-                    $id = $this->askQuestion("Enter the id of the book");
-                    if (!is_numeric($id)) {
-                        $this->printLine("Invalid id please try again.");
-                        goto askIDOfReader;
-                    }
-
-                    $readersInstances = $this->bookService->getBook($id);
-                    if (is_null($readersInstances)) {
-                        $this->printLine("Book not found, please try again.");
-                        goto askIDOfReader;
-                    }
-
-                    $readersInstances = $readersInstances[0];
-                } else {
-                    $readersInstances = $readersInstances[0];
-                }
-
-                $bookRemoved = $this->readerService->removeReader($readersInstances);
+                $bookRemoved = $this->authorService->removeAuthor($authorInstance);
 
                 if ($bookRemoved) {
                     $this->separator();
-                    $this->printLine("Reader has been removed!");
+                    $this->printLine("Author has been removed!");
                     $this->separator();
                 } else {
                     $this->separator();
-                    $this->printLine("Sorry the reader wasnt found, please try again!");
+                    $this->printLine("Sorry the author wasnt found, please try again!");
                     $this->separator();
-                    goto removeReaderLable;
+                    goto removeAuthorLable;
                 }
                 break;
 
             case '4':
-                editReader:
-                $reader = $this->askQuestion("Enter the reader id / card number or name (First name and Last name): ");
-                $readersInstances = $this->readerService->getReader($reader);
+                editAuthor:
+                $author = $this->askQuestion("Enter the author id : ");
+                $authorInstance = $this->authorService->getAuthor($author);
 
-                if (is_null($readersInstances)) {
-                    $this->printLine("Reader not found, please try again.");
-                    goto editReader;
+                if (is_null($authorInstance)) {
+                    $this->printLine("Author not found, please try again.");
+                    goto editAuthor;
                 }
-
-                if (sizeof($readersInstances) > 1) {
-                    $this->separator();
-                    $this->printLine("We found " . sizeof($readersInstances) . " results for your search");
-                    
-                    $this->separator();
-                    foreach ($readersInstances as $reader) {
-                        $this->printLine("First name : {$reader->getFirstName()}");
-                        $this->printLine("Last name : {$reader->getLastName()}");
-                        $this->printLine("Card number : {$reader->getCardNumber()}");
-                        $this->separator();
-                    }
-
-                    askIDOfReaderForEdit:
-                    $id = $this->askQuestion("Enter the id of the reader");
-                    if (!is_numeric($id)) {
-                        $this->printLine("Invalid id please try again.");
-                        goto askIDOfReaderForEdit;
-                    }
-
-                    $readersInstances = $this->readerService->getReader($id);
-                    if (is_null($readersInstances)) {
-                        $this->printLine("Reader not found, please try again.");
-                        goto askIDOfReaderForEdit;
-                    }
-
-                    $readerInstance = $readersInstances[0];
-                } else {
-                    $readerInstance = $readersInstances[0];
-                }
-
-                editReaderForm:
-                $this->expect = ['1', '2', '3', '4'];
+                
+                editAuthorForm:
+                $this->expect = ['1', '2', '3'];
 
                 $this->printLine("[1] - Edit the first name");
                 $this->printLine("[2] - Edit the last name");
-                $this->printLine("[3] - Edit the address");
+                $this->printLine("[3] - Edit the nationality");
 
                 $this->askQuestion("Enter the number : ", $this->expect);
 
                 switch ($this->value) {
                     case '1':
-                        $readerInstance->setFirstName($this->askQuestion("Enter the new first name: "));
+                        $authorInstance->setFirstName($this->askQuestion("Enter the new first name: "));
                         break;
 
                     case '2':
-                        $readerInstance->setLastName($this->askQuestion("Enter the last name: "));
+                        $authorInstance->setLastName($this->askQuestion("Enter the last name: "));
                         break;
 
                     case '3':
-                        $readerInstance->setAddress($this->askQuestion("Enter the new address: "));
+                        $authorInstance->setNationality($this->askQuestion("Enter the new nationality: "));
                         break;
 
                     default:
-                        goto editReaderForm;
+                        goto editAuthorForm;
                 }
 
-                $this->readerService->editReader($readerInstance);
+                $this->authorService->editAuthor($authorInstance);
 
                 $this->separator();
-                $this->printLine("Reader has been saved!");
+                $this->printLine("Author has been saved!");
                 $this->separator();
                 break;
 
@@ -262,47 +204,16 @@ class ConsoleInterface extends Console
 
             case '3':
                 removeReaderLable:
-                $reader = $this->askQuestion("Enter the reader id / card number or name (First name and Last name): ");
-                $readersInstances = $this->readerService->getReader($reader);
+                $reader = $this->askQuestion("Enter the reader id : ");
+                $readerInstance = $this->readerService->getReader($reader);
 
                 if (is_null($readersInstances)) {
                     $this->printLine("Reader not found, please try again.");
                     goto removeReaderLable;
                 }
 
-                if (sizeof($readersInstances) > 1) {
-                    $this->separator();
-                    $this->printLine("We found " . sizeof($readersInstances) . " results for your search");
-                    
-                    $this->separator();
-                    foreach ($readersInstances as $reader) {
-                        $this->printLine("First name : {$reader->getFirstName()}");
-                        $this->printLine("Last name : {$reader->getLastName()}");
-                        $this->printLine("Card number : {$reader->getCardNumber()}");
-                        $this->separator();
-                    }
-
-                    askIDOfReader:
-                    $id = $this->askQuestion("Enter the id of the book");
-                    if (!is_numeric($id)) {
-                        $this->printLine("Invalid id please try again.");
-                        goto askIDOfReader;
-                    }
-
-                    $readersInstances = $this->bookService->getBook($id);
-                    if (is_null($readersInstances)) {
-                        $this->printLine("Book not found, please try again.");
-                        goto askIDOfReader;
-                    }
-
-                    $readersInstances = $readersInstances[0];
-                } else {
-                    $readersInstances = $readersInstances[0];
-                }
-
-                $bookRemoved = $this->readerService->removeReader($readersInstances);
-
-                if ($bookRemoved) {
+                $readerRemoved = $this->readerService->removeReader($readerInstance);
+                if ($readerRemoved) {
                     $this->separator();
                     $this->printLine("Reader has been removed!");
                     $this->separator();
@@ -316,42 +227,12 @@ class ConsoleInterface extends Console
 
             case '4':
                 editReader:
-                $reader = $this->askQuestion("Enter the reader id / card number or name (First name and Last name): ");
-                $readersInstances = $this->readerService->getReader($reader);
+                $reader = $this->askQuestion("Enter the reader id : ");
+                $readerInstance = $this->readerService->getReader($reader);
 
                 if (is_null($readersInstances)) {
                     $this->printLine("Reader not found, please try again.");
                     goto editReader;
-                }
-
-                if (sizeof($readersInstances) > 1) {
-                    $this->separator();
-                    $this->printLine("We found " . sizeof($readersInstances) . " results for your search");
-                    
-                    $this->separator();
-                    foreach ($readersInstances as $reader) {
-                        $this->printLine("First name : {$reader->getFirstName()}");
-                        $this->printLine("Last name : {$reader->getLastName()}");
-                        $this->printLine("Card number : {$reader->getCardNumber()}");
-                        $this->separator();
-                    }
-
-                    askIDOfReaderForEdit:
-                    $id = $this->askQuestion("Enter the id of the reader");
-                    if (!is_numeric($id)) {
-                        $this->printLine("Invalid id please try again.");
-                        goto askIDOfReaderForEdit;
-                    }
-
-                    $readersInstances = $this->readerService->getReader($id);
-                    if (is_null($readersInstances)) {
-                        $this->printLine("Reader not found, please try again.");
-                        goto askIDOfReaderForEdit;
-                    }
-
-                    $readerInstance = $readersInstances[0];
-                } else {
-                    $readerInstance = $readersInstances[0];
                 }
 
                 editReaderForm:
@@ -463,25 +344,18 @@ class ConsoleInterface extends Console
             case '4':
                 searchBookLable:
                 $book = $this->askQuestion("Enter the book title / id or ISBN");
-                $booksInstances = $this->bookService->getBook($book);
-                if (is_null($booksInstances)) {
+                $bookInstance = $this->bookService->getBook($book);
+                if (is_null($bookInstance)) {
                     $this->printLine("Book not found, please try again.");
                     goto searchBookLable;
                 }
 
-                if (sizeof($booksInstances) > 1) {
-                    $this->separator();
-                    $this->printLine("Found two books");
-                }
-
                 $this->separator();
-                foreach ($booksInstances as $bookInstance) {
-                    $this->printLine("Title : {$bookInstance->getTitle()}");
-                    $this->printLine("ISBN : {$bookInstance->getISBN()}");
-                    $this->printLine("Publishing date : {$bookInstance->getPublishingDate()}");
-                    $this->printLine("Availability : " . ($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
-                    $this->separator();
-                }
+                $this->printLine("Title : {$bookInstance->getTitle()}");
+                $this->printLine("ISBN : {$bookInstance->getISBN()}");
+                $this->printLine("Publishing date : {$bookInstance->getPublishingDate()}");
+                $this->printLine("Availability : " . ($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
+                $this->separator();
                 break;
 
             case '5':
@@ -508,42 +382,10 @@ class ConsoleInterface extends Console
             case '6':
                 removeBookLable:
                 $book = $this->askQuestion("Enter the book title / id or ISBN");
-                $booksInstances = $this->bookService->getBook($book);
+                $bookInstance = $this->bookService->getBook($book);
                 if (is_null($booksInstances)) {
                     $this->printLine("Book not found, please try again.");
                     goto removeBookLable;
-                }
-
-                if (sizeof($booksInstances) > 1) {
-                    $this->separator();
-                    $this->printLine("We found " . sizeof($booksInstances) . " results for your search");
-
-                    $this->separator();
-                    foreach ($booksInstances as $bookInstance) {
-                        $this->printLine("ID : {$bookInstance->getID()}");
-                        $this->printLine("Title : {$bookInstance->getTitle()}");
-                        $this->printLine("ISBN : {$bookInstance->getISBN()}");
-                        $this->printLine("Publishing date : {$bookInstance->getPublishingDate()}");
-                        $this->printLine("Availability : " . ($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
-                        $this->separator();
-                    }
-
-                    askIDOfBook:
-                    $id = $this->askQuestion("Enter the id of the book");
-                    if (!is_numeric($id)) {
-                        $this->printLine("Invalid id please try again.");
-                        goto askIDOfBook;
-                    }
-
-                    $bookInstance = $this->bookService->getBook($id);
-                    if (is_null($bookInstance)) {
-                        $this->printLine("Book not found, please try again.");
-                        goto askIDOfBook;
-                    }
-
-                    $bookInstance = $bookInstance[0];
-                } else {
-                    $bookInstance = $booksInstances[0];
                 }
 
                 $bookRemoved = $this->bookService->removeBook($bookInstance);
@@ -563,42 +405,10 @@ class ConsoleInterface extends Console
             case '7':
                 editBook:
                 $book = $this->askQuestion("Enter the book title / id or ISBN");
-                $booksInstances = $this->bookService->getBook($book);
+                $bookInstance = $this->bookService->getBook($book);
                 if (is_null($booksInstances)) {
                     $this->printLine("Book not found, please try again.");
                     goto editBook;
-                }
-
-                $bookInstance = $booksInstances[0];
-
-                if (sizeof($booksInstances) > 1) {
-                    $this->separator();
-                    $this->printLine("We found " . sizeof($booksInstances) . " results for your search");
-
-                    $this->separator();
-                    foreach ($booksInstances as $bookInstance) {
-                        $this->printLine("ID : {$bookInstance->getID()}");
-                        $this->printLine("Title : {$bookInstance->getTitle()}");
-                        $this->printLine("ISBN : {$bookInstance->getISBN()}");
-                        $this->printLine("Publishing date : {$bookInstance->getPublishingDate()}");
-                        $this->printLine("Availability : " . ($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
-                        $this->separator();
-                    }
-
-                    askIDOfBookEdit:
-                    $id = $this->askQuestion("Enter the id of the book");
-                    if (!is_numeric($id)) {
-                        $this->printLine("Invalid id please try again.");
-                        goto askIDOfBookEdit;
-                    }
-
-                    $bookInstance = $this->bookService->getBook($id);
-                    if (is_null($bookInstance)) {
-                        $this->printLine("Book not found, please try again.");
-                        goto askIDOfBookEdit;
-                    }
-
-                    $bookInstance = $bookInstance[0];
                 }
 
                 editBookForm:

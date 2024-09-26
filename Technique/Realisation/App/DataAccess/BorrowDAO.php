@@ -14,7 +14,10 @@ class BorrowDAO
         $this->database = new Database();
     }
 
-    public function getBorrowings(): array
+    /**
+     * @return Borrow[]
+     */
+    public function getBorrowings()
     {
         return $this->database->borrowings;
     }
@@ -35,26 +38,19 @@ class BorrowDAO
         $this->database->saveData();
     }
 
-    /**
-     * @param mixed $needle
-     * @return Borrow[]|null
-     */
-    public function getBorrowing(mixed $needle)
+    public function getBorrowing(mixed $needle): Borrow|null
     {
         /** @var Borrow[] */
         $borrowings = $this->getBorrowings();
-
-        if(is_numeric($needle)) {
-            $borrowingsFiltered = array_values(array_filter($borrowings, function (Borrow $borrowing) use ($needle) {
-                if($borrowing->getId() === (int) $needle) {
-                    return true;
-                }
-                return false;
-            }));
-
-            if(sizeof($borrowingsFiltered) > 0) {
-                return $borrowingsFiltered;
+        $borrowingsFiltered = array_values(array_filter($borrowings, function (Borrow $borrowing) use ($needle) {
+            if ($borrowing->getId() === (int) $needle) {
+                return true;
             }
+            return false;
+        }));
+
+        if (sizeof($borrowingsFiltered) > 0) {
+            return $borrowingsFiltered[0];
         }
 
         return null;

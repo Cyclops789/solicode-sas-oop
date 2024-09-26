@@ -38,11 +38,7 @@ class BookDAO
         $this->database->saveData();
     }
 
-    /**
-     * @param mixed $needle it can be string or int
-     * @return Book[]|null
-     */
-    public function getBook(mixed $needle)
+    public function getBook(mixed $needle): Book|null
     {
         /** @var Book[] */
         $books = $this->getBooks();
@@ -56,7 +52,7 @@ class BookDAO
             }));
 
             if (sizeof($bookFiltered) > 0) {
-                return $bookFiltered;
+                return $bookFiltered[0];
             }
         } else {
             $bookFiltered = array_values(array_filter($books, function (Book $book) use ($needle) {
@@ -71,7 +67,7 @@ class BookDAO
             }));
 
             if (sizeof($bookFiltered) > 0) {
-                return $bookFiltered;
+                return $bookFiltered[0];
             }
         }
 
