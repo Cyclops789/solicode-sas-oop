@@ -12,7 +12,7 @@ class Book
     private $publishing_date;
     private Author $author;
 
-    public function __construct($isbn, $title, $publishing_date, $author, $borrowings = [])
+    public function __construct($isbn, $title, $publishing_date, $author)
     {
         $this->id = time();
         $this->isbn = $isbn;

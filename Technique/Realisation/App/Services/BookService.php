@@ -19,6 +19,9 @@ class BookService
         $this->borrowDAO = new BorrowDAO();
     }
 
+    /**
+     * @return Book[]
+     */
     public function getBooks()
     {
         return $this->bookDAO->getBooks();

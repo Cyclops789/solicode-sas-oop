@@ -71,6 +71,11 @@ abstract class Console
         echo $colorValue . $line . "\n" . Colors::DEFAULT ->value;
     }
 
+    public function printOption(string $optionName, string $optionValue)
+    {
+        echo Colors::RED->value . "[" . Colors::YELLOW->value . $optionValue . Colors::RED->value . "] - " . Colors::DEFAULT ->value . $optionName . "\n" . Colors::DEFAULT ->value;
+    }
+
     public static function getID(): int
     {
         return random_int(1000, 9999);

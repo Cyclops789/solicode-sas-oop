@@ -34,10 +34,10 @@ class Database
         $contents = file_get_contents($this->dataFile);
         $data = unserialize($contents);
 
-        $this->books = $data->books;
-        $this->readers = $data->readers;
-        $this->authors = $data->authors;
-        $this->borrowings = $data->borrowings;
+        $this->books = $data->books ?? [];
+        $this->readers = $data->readers ?? [];
+        $this->authors = $data->authors ?? [];
+        $this->borrowings = $data->borrowings ?? [];
     }
 
     public function saveData()

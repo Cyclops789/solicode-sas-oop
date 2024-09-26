@@ -17,7 +17,10 @@ class BookDAO
         $this->borrowDAO = new BorrowDAO();
     }
 
-    public function getBooks(): array
+    /**
+     * @return Book[]
+     */
+    public function getBooks()
     {
         return $this->database->books;
     }
@@ -46,6 +49,17 @@ class BookDAO
         if (is_numeric($needle)) {
             $bookFiltered = array_values(array_filter($books, function (Book $book) use ($needle) {
                 if ($book->getId() === (int) $needle) {
+                    return true;
+                }
+                return false;
+            }));
+
+            if (sizeof($bookFiltered) > 0) {
+                return $bookFiltered[0];
+            }
+
+            $bookFiltered = array_values(array_filter($books, function (Book $book) use ($needle) {
+                if ($book->getIsbn() === $needle) {
                     return true;
                 }
                 return false;
@@ -91,7 +105,14 @@ class BookDAO
             return true;
         }));
 
-        if (sizeof($restOfBooks) > 0) {
+        $borrowings = $this->borrowDAO->getBorrowings();
+        foreach ($borrowings as $borrowing) {
+            if($book->getId() === $borrowing->getBook()->getId()) {
+                $this->borrowDAO->removeBorrowing($borrowing);
+            }
+        }
+
+        if (sizeof($restOfBooks) !== sizeof($books)) {
             $this->setBooks($restOfBooks);
             return true;
         }

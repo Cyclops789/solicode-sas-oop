@@ -70,7 +70,7 @@ class ReaderDAO
             return true;
         }));
 
-        if (sizeof($restOfReaders) > 0) {
+        if (sizeof($restOfReaders) !== sizeof($readers)) {
             $this->setReaders($restOfReaders);
             return true;
         }

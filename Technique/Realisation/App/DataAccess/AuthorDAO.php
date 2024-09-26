@@ -8,10 +8,12 @@ use App\Entities\Author;
 class AuthorDAO
 {
     private Database $database;
+    private BookDAO $bookDAO;
 
     public function __construct()
     {
         $this->database = new Database();
+        $this->bookDAO = new BookDAO();
     }
 
     public function getAuthors(): array
@@ -68,8 +70,15 @@ class AuthorDAO
             }
             return true;
         }));
+        
+        $authorBooks = $this->bookDAO->getBooks();
+        foreach ($authorBooks as $book) {
+            if($book->getAuthor()->getId() === $author->getId()) {
+                $this->bookDAO->removeBook($book);
+            }
+        }
 
-        if (sizeof($restOfAuthors) > 0) {
+        if (sizeof($restOfAuthors) !== sizeof($authors)) {
             $this->setAuthors($restOfAuthors);
             return true;
         }
