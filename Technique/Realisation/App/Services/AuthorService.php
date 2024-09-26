@@ -14,6 +14,9 @@ class AuthorService {
         $this->authorDAO = new AuthorDAO();
     }
 
+    /**
+     * @return Author[]
+     */
     public function getAuthors()
     {
         return $this->authorDAO->getAuthors();
@@ -26,36 +29,6 @@ class AuthorService {
 
     public function getAuthor(mixed $needle): Author|null
     {
-        /** @var Author[] */
-        $authors = $this->getAuthors();
-
-        if(is_numeric($needle)) {
-            $authorsFiltered = array_values(array_filter($authors, function (Author $author) use ($needle) {
-                if($author->getId() === (int) $needle) {
-                    return true;
-                }
-                return false;
-            }));
-
-            if(sizeof($authorsFiltered) > 0) {
-                return $authorsFiltered[0];
-            }
-        } else {
-            $authorsFiltered = array_values(array_filter($authors, function (Author $author) use ($needle) {
-                if(
-                    str_starts_with(strtolower($author->getFirstName()." ".$author->getLastName()), strtolower($needle)) || 
-                    str_ends_with(strtolower($author->getFirstName()." ".$author->getLastName()), strtolower($needle))
-                ) {
-                    return true;
-                }
-                return false;
-            }));
-
-            if(sizeof($authorsFiltered) > 0) {
-                return $authorsFiltered[0];
-            }
-        }
-
-        return null;
+        return $this->getAuthor($needle);
     }
 }

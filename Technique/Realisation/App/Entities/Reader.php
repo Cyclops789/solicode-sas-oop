@@ -12,10 +12,10 @@ class Reader
     private $last_name;
     private $address;
 
-    public function __construct($card_number, $first_name, $last_name, $borrowings = [])
+    public function __construct($first_name, $last_name)
     {
         $this->id = time();
-        $this->card_number = $card_number;
+        $this->card_number = "CN-".time();
         $this->first_name = $first_name;
         $this->last_name = $last_name;
     }

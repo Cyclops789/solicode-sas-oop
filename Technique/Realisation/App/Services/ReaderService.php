@@ -14,6 +14,9 @@ class ReaderService {
         $this->readerDAO = new ReaderDAO();
     }
 
+    /**
+     * @return Reader[]
+     */
     public function getReaders()
     {
         return $this->readerDAO->getReaders();
@@ -30,36 +33,25 @@ class ReaderService {
      */
     public function getReader(mixed $needle)
     {
-        /** @var Reader[] */
-        $readers = $this->getReaders();
+        return $this->readerDAO->getReader($needle); 
+    }
 
-        if(is_numeric($needle)) {
-            $readersFiltered = array_values(array_filter($readers, function (Reader $reader) use ($needle) {
-                if($reader->getId() === (int) $needle) {
-                    return true;
-                }
-                return false;
-            }));
+    /**
+     * 
+     * @param Reader $reader
+     * @return bool true if the reader were found and removed, false if the reader wasnt found
+     */
+    public function removeReader(Reader $reader): bool
+    {
+        return $this->readerDAO->removeReader($reader);
+    }
 
-            if(sizeof($readersFiltered) > 0) {
-                return $readersFiltered;
-            }
-        } else {
-            $readersFiltered = array_values(array_filter($readers, function (Reader $reader) use ($needle) {
-                if(
-                    str_starts_with(strtolower($reader->getFirstName()." ".$reader->getLastName()), strtolower($needle)) || 
-                    str_ends_with(strtolower($reader->getFirstName()." ".$reader->getLastName()), strtolower($needle))
-                ) {
-                    return true;
-                }
-                return false;
-            }));
-
-            if(sizeof($readersFiltered) > 0) {
-                return $readersFiltered;
-            }
-        }
-
-        return null;
+    /**
+     * @param Reader $reader the edited instance of the book
+     * @return void
+     */
+    public function editReader(Reader $reader): bool
+    {
+        return $this->readerDAO->editReader($reader);
     }
 }

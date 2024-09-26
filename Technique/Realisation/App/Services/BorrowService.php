@@ -30,22 +30,6 @@ class BorrowService {
      */
     public function getBorrowing(mixed $needle)
     {
-        /** @var Borrow[] */
-        $borrowings = $this->getBorrowings();
-
-        if(is_numeric($needle)) {
-            $borrowingsFiltered = array_values(array_filter($borrowings, function (Borrow $borrowing) use ($needle) {
-                if($borrowing->getId() === (int) $needle) {
-                    return true;
-                }
-                return false;
-            }));
-
-            if(sizeof($borrowingsFiltered) > 0) {
-                return $borrowingsFiltered;
-            }
-        }
-
-        return null;
+        return $this->borrowDAO->getBorrowing($needle);
     }
 }

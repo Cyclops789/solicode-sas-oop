@@ -9,7 +9,7 @@ class Database
     public $readers = [];
     public $borrowings = [];
 
-    private string $dataFile = __DIR__ . "/../DB/data.db";
+    private string $dataFile = __DIR__ . "/../DB/Database.db";
 
     public function __construct()
     {
