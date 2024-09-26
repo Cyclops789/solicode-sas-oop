@@ -1,9 +1,4 @@
-127.0.0.1       localhost
-127.0.1.1       debian
-# here
 127.0.0.1       php-project
-
-# The following lines are desirable for IPv6 capable hosts
-::1     localhost ip6-localhost ip6-loopback
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
+127.0.0.1       site-1-html
+127.0.0.1       site-2-html
+127.0.0.1       site-3-html
