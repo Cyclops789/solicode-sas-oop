@@ -1,5 +1,6 @@
 # Links
-- Local project: http://php-project
+- Local project: http://php-project:81
+- Public project: https://php-project.cyyc.lol
 
 - Local 1: http://site-1-html
 - Local 2: http://site-2-html
