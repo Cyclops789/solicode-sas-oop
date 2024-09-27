@@ -3,6 +3,7 @@
 namespace App\Realisation\DataAccess;
 
 use App\Realisation\DB\Database;
+use App\Realisation\Entities\Author;
 use App\Realisation\Entities\Book;
 use App\Realisation\Entities\Borrow;
 
@@ -118,6 +119,18 @@ class BookDAO
         }
 
         return false;
+    }
+
+    public function removeAuthorBooks(Author $author)
+    {
+        $authorId = $author->getId();
+        $authorBooks = $this->getBooks();
+        
+        foreach ($authorBooks as $book) {
+            if($book->getAuthor()->getId() === $authorId) {
+                $this->removeBook($book);
+            }
+        }
     }
 
     /**

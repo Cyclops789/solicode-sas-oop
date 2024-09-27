@@ -73,14 +73,6 @@ class AuthorDAO
 
         if (sizeof($restOfAuthors) !== sizeof($authors)) {
             $this->setAuthors($restOfAuthors);
-            
-            $authorBooks = $this->bookDAO->getBooks();
-            foreach ($authorBooks as $book) {
-                if($book->getAuthor()->getId() === $author->getId()) {
-                    $this->bookDAO->removeBook($book);
-                }
-            }
-
             return true;
         }
 
