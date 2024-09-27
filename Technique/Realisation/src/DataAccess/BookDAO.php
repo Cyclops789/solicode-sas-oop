@@ -6,16 +6,17 @@ use App\Realisation\DB\Database;
 use App\Realisation\Entities\Author;
 use App\Realisation\Entities\Book;
 use App\Realisation\Entities\Borrow;
+use App\Realisation\Services\BorrowService;
 
 class BookDAO
 {
     private Database $database;
-    private BorrowDAO $borrowDAO;
+    private BorrowService $borrowService;
 
     public function __construct()
     {
         $this->database = new Database();
-        $this->borrowDAO = new BorrowDAO();
+        $this->borrowService = new BorrowService();
     }
 
     /**
@@ -107,10 +108,10 @@ class BookDAO
         }));
 
         if (sizeof($restOfBooks) !== sizeof($books)) {
-            $borrowings = $this->borrowDAO->getBorrowings();
+            $borrowings = $this->borrowService->getBorrowings();
             foreach ($borrowings as $borrowing) {
                 if($book->getId() === $borrowing->getBook()->getId()) {
-                    $this->borrowDAO->removeBorrowing($borrowing);
+                    $this->borrowService->removeBorrowing($borrowing);
                 }
             }
 
@@ -125,12 +126,16 @@ class BookDAO
     {
         $authorId = $author->getId();
         $authorBooks = $this->getBooks();
-        
+        $removedBooks = 0;
+
         foreach ($authorBooks as $book) {
             if($book->getAuthor()->getId() === $authorId) {
                 $this->removeBook($book);
+                $removedBooks += 1;
             }
         }
+
+        return $removedBooks;
     }
 
     /**
@@ -163,7 +168,7 @@ class BookDAO
     public function getAvailableBooks()
     {
         /** @var Borrow[] */
-        $borrowings = $this->borrowDAO->getBorrowings();
+        $borrowings = $this->borrowService->getBorrowings();
         $allBorrowedBooksIDs = array_flip(array_map(fn(Borrow $borrow) => $borrow->getBook()->getId(), $borrowings));
 
         return array_values(array_filter($this->getBooks(), function (Book $book) use ($allBorrowedBooksIDs) {
@@ -177,7 +182,7 @@ class BookDAO
     public function isBookBorrowed(Book $book): bool
     {
         /** @var Borrow[] */
-        $borrowings = $this->borrowDAO->getBorrowings();
+        $borrowings = $this->borrowService->getBorrowings();
         $allBorrowedBooksIDs = array_flip(array_map(fn(Borrow $borrow) => $borrow->getBook()->getId(), $borrowings));
         if (isset($allBorrowedBooksIDs[$book->getID()])) {
             return true;

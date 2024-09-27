@@ -4,16 +4,17 @@ namespace App\Realisation\DataAccess;
 
 use App\Realisation\DB\Database;
 use App\Realisation\Entities\Author;
+use App\Realisation\Services\BookService;
 
 class AuthorDAO
 {
     private Database $database;
-    private BookDAO $bookDAO;
+    private BookService $bookService;
 
     public function __construct()
     {
         $this->database = new Database();
-        $this->bookDAO = new BookDAO();
+        $this->bookService = new BookService();
     }
 
     public function getAuthors(): array
@@ -72,7 +73,12 @@ class AuthorDAO
         }));
 
         if (sizeof($restOfAuthors) !== sizeof($authors)) {
-            $this->setAuthors($restOfAuthors);
+            try {
+                $this->setAuthors($restOfAuthors);
+            } finally {
+                $this->bookService->removeAuthorBooks($author);
+            }
+            
             return true;
         }
 

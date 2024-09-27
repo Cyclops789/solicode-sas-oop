@@ -4,19 +4,17 @@ namespace App\Realisation\Services;
 
 use App\Realisation\DataAccess\BookDAO;
 use App\Realisation\DataAccess\BorrowDAO;
-use App\Realisation\Entities\Borrow;
+use App\Realisation\Entities\Author;
 use App\Realisation\Entities\Book;
 
 class BookService
 {
 
     private BookDAO $bookDAO;
-    private BorrowDAO $borrowDAO;
 
     public function __construct()
     {
         $this->bookDAO = new BookDAO();
-        $this->borrowDAO = new BorrowDAO();
     }
 
     /**
@@ -66,5 +64,10 @@ class BookService
     public function isBookBorrowed(Book $book): bool
     {
         return $this->bookDAO->isBookBorrowed($book);
+    }
+
+    public function removeAuthorBooks(Author $author)
+    {
+        return $this->bookDAO->removeAuthorBooks($author);
     }
 }

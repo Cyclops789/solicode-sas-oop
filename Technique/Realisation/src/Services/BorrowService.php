@@ -27,4 +27,9 @@ class BorrowService {
     {
         return $this->borrowDAO->getBorrowing($needle);
     }
+
+    public function removeBorrowing(Borrow $borrowing)
+    {
+        return $this->borrowDAO->removeBorrowing($borrowing);
+    }
 }

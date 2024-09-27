@@ -12,7 +12,7 @@ require 'vendor/autoload.php';
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">Library Catalog</h1>
+        <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">Library App</h1>
         <form method="post" class="mb-8">
             <div class="flex justify-center">
                 <input type="text" name="search" placeholder="Search for a book..." class="w-full max-w-md px-4 py-2 rounded-l-lg border-2 border-blue-500 focus:outline-none focus:border-blue-600">
