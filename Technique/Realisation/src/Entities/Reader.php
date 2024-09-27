@@ -1,38 +1,41 @@
 <?php
 
-namespace App\Entities;
+namespace App\Realisation\Entities;
 
-class Author
+use App\Realisation\Entities\Borrow;
+
+class Reader
 {
     private $id;
+    private $card_number;
     private $first_name;
     private $last_name;
-    private $nationality;
+    private $address;
 
-    public function __construct($first_name, $last_name, $nationality)
+    public function __construct($first_name, $last_name)
     {
         $this->id = time();
-        $this->first_name = $first_name; 
+        $this->card_number = "CN-".time();
+        $this->first_name = $first_name;
         $this->last_name = $last_name;
-        $this->nationality = $nationality;
     }
 
     /**
-     * Get the value of id
+     * Get the value of card_number
      */ 
-    public function getId()
+    public function getCardNumber()
     {
-        return $this->id;
+        return $this->card_number;
     }
 
     /**
-     * Set the value of id
+     * Set the value of card_number
      *
      * @return  self
      */ 
-    public function setId($id)
+    public function setCardNumber($card_number)
     {
-        $this->id = $id;
+        $this->card_number = $card_number;
 
         return $this;
     }
@@ -78,21 +81,41 @@ class Author
     }
 
     /**
-     * Get the value of nationality
+     * Get the value of address
      */ 
-    public function getNationality()
+    public function getAddress()
     {
-        return $this->nationality;
+        return $this->address;
     }
 
     /**
-     * Set the value of nationality
+     * Set the value of address
      *
      * @return  self
      */ 
-    public function setNationality($nationality)
+    public function setAddress($address)
     {
-        $this->nationality = $nationality;
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\DataAccess;
+namespace App\Realisation\DataAccess;
 
-use App\DB\Database;
-use App\Entities\Author;
+use App\Realisation\DB\Database;
+use App\Realisation\Entities\Author;
 
 class AuthorDAO
 {
@@ -70,16 +70,17 @@ class AuthorDAO
             }
             return true;
         }));
-        
-        $authorBooks = $this->bookDAO->getBooks();
-        foreach ($authorBooks as $book) {
-            if($book->getAuthor()->getId() === $author->getId()) {
-                $this->bookDAO->removeBook($book);
-            }
-        }
 
         if (sizeof($restOfAuthors) !== sizeof($authors)) {
             $this->setAuthors($restOfAuthors);
+            
+            $authorBooks = $this->bookDAO->getBooks();
+            foreach ($authorBooks as $book) {
+                if($book->getAuthor()->getId() === $author->getId()) {
+                    $this->bookDAO->removeBook($book);
+                }
+            }
+
             return true;
         }
 

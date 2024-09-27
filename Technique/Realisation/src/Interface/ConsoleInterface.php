@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Interface;
+namespace App\Realisation\Interface;
 
-use App\Entities\Author;
-use App\Entities\Borrow;
-use App\Entities\Reader;
-use App\Managers\Colors;
-use App\Managers\Console;
-use App\Entities\Book;
-use App\Services\BookService;
-use App\Services\AuthorService;
-use App\Services\BorrowService;
-use App\Services\ReaderService;
+use App\Realisation\Entities\Author;
+use App\Realisation\Entities\Borrow;
+use App\Realisation\Entities\Reader;
+use App\Realisation\Managers\Console;
+use App\Realisation\Entities\Book;
+use App\Realisation\Services\BookService;
+use App\Realisation\Services\AuthorService;
+use App\Realisation\Services\BorrowService;
+use App\Realisation\Services\ReaderService;
 
 class ConsoleInterface extends Console
 {
@@ -106,7 +105,7 @@ class ConsoleInterface extends Console
                 $author = $this->askQuestion("Enter the author id : ");
                 $authorInstance = $this->authorService->getAuthor($author);
 
-                if (is_null($authorsInstances)) {
+                if (is_null($authorInstance)) {
                     $this->printLine("Author not found, please try again.");
                     goto removeAuthorLable;
                 }
@@ -400,12 +399,13 @@ class ConsoleInterface extends Console
                 $title = $this->askQuestion("Enter the title: ");
                 $isbn = $this->askQuestion("Enter the ISBN: ");
                 $publishing_date = $this->askQuestion("Enter the publishing date: ");
+                enterAuthorId:
                 $author = $this->askQuestion("Enter the author id: ");
 
                 $authorInstance = $this->authorService->getAuthor($author);
                 if (is_null($authorInstance)) {
                     $this->printLine("Author not found, please try again.");
-                    goto newBook;
+                    goto enterAuthorId;
                 }
 
                 $book = new Book($isbn, $title, $publishing_date, $authorInstance);
@@ -500,7 +500,7 @@ class ConsoleInterface extends Console
                     $this->printLine("ID : {$borrowing->getId()}");
                     $this->printLine("Date of borrowing : {$borrowing->getBorrowedDate()}");
                     $this->printLine("Expect return date : {$borrowing->getExpectedReturnDate()}");
-                    $this->printLine("Actual return date : ".($borrowing->getActualReturnDate() ?? "Not yet"));
+                    $this->printLine("Actual return date : ".($borrowing->getActualReturnDate() ?? "Not returned yet"));
                     $this->printLine("Book : ".$borrowing->getBook()->getId()." - ".$borrowing->getBook()->getTitle());
                     $this->separator();
                 }

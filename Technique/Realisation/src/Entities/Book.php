@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entities;
+namespace App\Realisation\Entities;
 
-use APp\Entities\Author;
+use App\Realisation\Entities\Author;
 
 class Book
 {

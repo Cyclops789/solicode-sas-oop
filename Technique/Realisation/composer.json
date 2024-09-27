@@ -1,0 +1,14 @@
+{
+    "name": "app/realisation",
+    "autoload": {
+        "psr-4": {
+            "App\\Realisation\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Cyclops789",
+            "email": "70551889+Cyclops789@users.noreply.github.com"
+        }
+    ]
+}

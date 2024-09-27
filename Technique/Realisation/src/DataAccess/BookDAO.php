@@ -1,10 +1,10 @@
 <?php
 
-namespace App\DataAccess;
+namespace App\Realisation\DataAccess;
 
-use App\DB\Database;
-use App\Entities\Book;
-use App\Entities\Borrow;
+use App\Realisation\DB\Database;
+use App\Realisation\Entities\Book;
+use App\Realisation\Entities\Borrow;
 
 class BookDAO
 {
@@ -105,14 +105,14 @@ class BookDAO
             return true;
         }));
 
-        $borrowings = $this->borrowDAO->getBorrowings();
-        foreach ($borrowings as $borrowing) {
-            if($book->getId() === $borrowing->getBook()->getId()) {
-                $this->borrowDAO->removeBorrowing($borrowing);
-            }
-        }
-
         if (sizeof($restOfBooks) !== sizeof($books)) {
+            $borrowings = $this->borrowDAO->getBorrowings();
+            foreach ($borrowings as $borrowing) {
+                if($book->getId() === $borrowing->getBook()->getId()) {
+                    $this->borrowDAO->removeBorrowing($borrowing);
+                }
+            }
+
             $this->setBooks($restOfBooks);
             return true;
         }

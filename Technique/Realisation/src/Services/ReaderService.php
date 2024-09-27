@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Realisation\Services;
 
-use App\DataAccess\ReaderDAO;
-use App\Entities\Reader;
+use App\Realisation\DataAccess\ReaderDAO;
+use App\Realisation\Entities\Reader;
 
 class ReaderService {
 

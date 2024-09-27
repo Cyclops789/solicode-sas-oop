@@ -1,9 +1,9 @@
 <?php
 
-namespace App\DataAccess;
+namespace App\Realisation\DataAccess;
 
-use App\DB\Database;
-use App\Entities\Borrow;
+use App\Realisation\DB\Database;
+use App\Realisation\Entities\Borrow;
 
 class BorrowDAO
 {

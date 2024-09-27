@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Realisation\Services;
 
-use App\DataAccess\BorrowDAO;
-use App\Entities\Borrow;
+use App\Realisation\DataAccess\BorrowDAO;
+use App\Realisation\Entities\Borrow;
 
 class BorrowService {
     private BorrowDAO $borrowDAO;

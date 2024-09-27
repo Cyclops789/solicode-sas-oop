@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Realisation\Services;
 
-use App\DataAccess\AuthorDAO;
-use App\Entities\Author;
+use App\Realisation\DataAccess\AuthorDAO;
+use App\Realisation\Entities\Author;
 
 class AuthorService {
 

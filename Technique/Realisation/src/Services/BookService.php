@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Realisation\Services;
 
-use App\DataAccess\BookDAO;
-use App\DataAccess\BorrowDAO;
-use App\Entities\Borrow;
-use App\Entities\Book;
+use App\Realisation\DataAccess\BookDAO;
+use App\Realisation\DataAccess\BorrowDAO;
+use App\Realisation\Entities\Borrow;
+use App\Realisation\Entities\Book;
 
 class BookService
 {

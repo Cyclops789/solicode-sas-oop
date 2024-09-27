@@ -1,41 +1,38 @@
 <?php
 
-namespace App\Entities;
+namespace App\Realisation\Entities;
 
-use App\Entities\Borrow;
-
-class Reader
+class Author
 {
     private $id;
-    private $card_number;
     private $first_name;
     private $last_name;
-    private $address;
+    private $nationality;
 
-    public function __construct($first_name, $last_name)
+    public function __construct($first_name, $last_name, $nationality)
     {
         $this->id = time();
-        $this->card_number = "CN-".time();
-        $this->first_name = $first_name;
+        $this->first_name = $first_name; 
         $this->last_name = $last_name;
+        $this->nationality = $nationality;
     }
 
     /**
-     * Get the value of card_number
+     * Get the value of id
      */ 
-    public function getCardNumber()
+    public function getId()
     {
-        return $this->card_number;
+        return $this->id;
     }
 
     /**
-     * Set the value of card_number
+     * Set the value of id
      *
      * @return  self
      */ 
-    public function setCardNumber($card_number)
+    public function setId($id)
     {
-        $this->card_number = $card_number;
+        $this->id = $id;
 
         return $this;
     }
@@ -81,41 +78,21 @@ class Reader
     }
 
     /**
-     * Get the value of address
+     * Get the value of nationality
      */ 
-    public function getAddress()
+    public function getNationality()
     {
-        return $this->address;
+        return $this->nationality;
     }
 
     /**
-     * Set the value of address
+     * Set the value of nationality
      *
      * @return  self
      */ 
-    public function setAddress($address)
+    public function setNationality($nationality)
     {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of id
-     */ 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */ 
-    public function setId($id)
-    {
-        $this->id = $id;
+        $this->nationality = $nationality;
 
         return $this;
     }

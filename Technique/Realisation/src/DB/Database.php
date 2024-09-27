@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DB;
+namespace App\Realisation\DB;
 
 class Database
 {
@@ -33,11 +33,17 @@ class Database
 
         $contents = file_get_contents($this->dataFile);
         $data = unserialize($contents);
-
-        $this->books = $data->books ?? [];
-        $this->readers = $data->readers ?? [];
-        $this->authors = $data->authors ?? [];
-        $this->borrowings = $data->borrowings ?? [];
+        if($data) {
+            $this->books = $data->books;
+            $this->readers = $data->readers;
+            $this->authors = $data->authors;
+            $this->borrowings = $data->borrowings;
+        } else {
+            $this->books = [];
+            $this->readers = [];
+            $this->authors = [];
+            $this->borrowings = [];
+        }
     }
 
     public function saveData()

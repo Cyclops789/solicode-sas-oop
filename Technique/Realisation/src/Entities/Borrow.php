@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Entities;
+namespace App\Realisation\Entities;
 
-use App\Entities\Book;
-use App\Entities\Reader;
+use App\Realisation\Entities\Book;
+use App\Realisation\Entities\Reader;
 
 class Borrow
 {

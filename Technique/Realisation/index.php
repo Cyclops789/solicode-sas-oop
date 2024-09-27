@@ -1,13 +1,5 @@
 <?php 
-spl_autoload_register(function ($class) {
-    $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
-    $baseDir = __DIR__ . '/';
-    $file = $baseDir . $class . '.php';
-
-    if (file_exists($file)) {
-        require_once $file;
-    }
-});
+require 'vendor/autoload.php';
 ?>
 
 <!DOCTYPE html>
@@ -26,8 +18,8 @@ spl_autoload_register(function ($class) {
     <ul>
         <?php
             if(isset($_POST['search']) && (is_string($_POST['search']) || is_integer($_POST['search']))) {
-                $book = (new App\Services\BookService())->getBook($_POST['search']);
-                $bookService = new App\Services\BookService();
+                $book = (new App\Realisation\Services\BookService())->getBook($_POST['search']);
+                $bookService = new App\Realisation\Services\BookService();
                 if(is_null($book)) {
                     echo "<li>Book not found</li>";
                 } else {
@@ -39,7 +31,7 @@ spl_autoload_register(function ($class) {
                     echo "<li><strong>Author</strong> : ".$book->getAuthor()->getFirstName()." ".$book->getAuthor()->getLastName()."</li>";
                 }
             } else {
-                $books = (new App\Services\BookService())->getAvailableBooks();
+                $books = (new App\Realisation\Services\BookService())->getAvailableBooks();
                 echo "<li>###########################################</li>";
                 foreach ($books as $book) {
                     echo "<li><strong>ID</strong> : {$book->getId()}</li>";
@@ -53,6 +45,7 @@ spl_autoload_register(function ($class) {
     
                 if(sizeof($books) === 0) {
                     echo "<li>There are no available books</li>";
+                    echo "<li>###########################################</li>";
                 }
             }
         ?>
