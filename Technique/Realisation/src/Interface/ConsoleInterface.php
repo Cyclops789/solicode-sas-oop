@@ -20,17 +20,19 @@ class ConsoleInterface extends Console
     private BorrowService $borrowService;
     private ReaderService $readerService;
 
-    public function __construct()
+    public function __construct(bool $skipIntro = false)
     {
         $this->authorService = new AuthorService();
         $this->bookService = new BookService();
         $this->borrowService = new BorrowService();
         $this->readerService = new ReaderService();
 
-        $this->printLine("[ ----------------------------------------------------- ]", "green");
-        $this->printLine("[ ------------------- Library system ------------------ ]", "green");
-        $this->printLine("[ ----------------------------------------------------- ]", "green");
-        
+        if (!$skipIntro) {
+            $this->printLine("[ ----------------------------------------------------- ]", "green");
+            $this->printLine("[ ------------------- Library system ------------------ ]", "green");
+            $this->printLine("[ ----------------------------------------------------- ]", "green");
+        }
+
         $this->expect = ['1', '2', '3'];
         $this->printOption("Manage books", "1");
         $this->printOption("Manage authors", "2");
@@ -56,7 +58,7 @@ class ConsoleInterface extends Console
                 break;
         }
 
-        new self();
+        new self(true);
     }
 
     public function enterAuthorsMode(): void
@@ -87,7 +89,7 @@ class ConsoleInterface extends Console
                     $this->separator();
                 }
 
-                if(sizeof($allAuthors) === 0) {
+                if (sizeof($allAuthors) === 0) {
                     $this->printLine("There are no authors at this moment.");
                     $this->separator();
                 }
@@ -95,11 +97,14 @@ class ConsoleInterface extends Console
 
             case '2':
                 $firstName = $this->askQuestion("Enter the first name (or type 'back' to get back): ");
-                if ($firstName === 'back') return;
+                if ($firstName === 'back')
+                    return;
                 $lastName = $this->askQuestion("Enter the last name (or type 'back' to get back): ");
-                if ($lastName === 'back') return;
+                if ($lastName === 'back')
+                    return;
                 $nationality = $this->askQuestion("Enter the nationality (or type 'back' to get back): ");
-                if ($nationality === 'back') return;
+                if ($nationality === 'back')
+                    return;
 
                 $author = new Author($firstName, $lastName, $nationality);
                 $this->authorService->addAuthor($author);
@@ -112,7 +117,8 @@ class ConsoleInterface extends Console
             case '3':
                 removeAuthorLable:
                 $author = $this->askQuestion("Enter the author id (or type 'back' to get back): ");
-                if ($author === 'back') return;
+                if ($author === 'back')
+                    return;
                 $authorInstance = $this->authorService->getAuthor($author);
 
                 if (is_null($authorInstance)) {
@@ -137,45 +143,28 @@ class ConsoleInterface extends Console
             case '4':
                 editAuthor:
                 $author = $this->askQuestion("Enter the author id (or type 'back' to get back): ");
-                if ($author === 'back') return;
+                if ($author === 'back')
+                    return;
                 $authorInstance = $this->authorService->getAuthor($author);
 
                 if (is_null($authorInstance)) {
                     $this->printLine("Author not found, please try again.");
                     goto editAuthor;
                 }
-                
-                editAuthorForm:
-                $this->expect = ['1', '2', '3'];
 
-                $this->printOption("Edit the first name", "1");
-                $this->printOption("Edit the last name", "2");
-                $this->printOption("Edit the nationality", "3");
+                $newFirstName = $this->askQuestion("Enter the new first name (or enter to skip): ");
+                if (!empty($newFirstName)) {
+                    $authorInstance->setFirstName($newFirstName);
+                }
 
-                $this->value = $this->askQuestion("Enter the number (or type 'back' to get back): ", $this->expect);
-                if ($this->value === 'back') return;
+                $newLastName = $this->askQuestion("Enter the last name (or enter to skip): ");
+                if (!empty($newLastName)) {
+                    $authorInstance->setLastName($newLastName);
+                }
 
-                switch ($this->value) {
-                    case '1':
-                        $newFirstName = $this->askQuestion("Enter the new first name (or type 'back' to get back): ");
-                        if ($newFirstName === 'back') return;
-                        $authorInstance->setFirstName($newFirstName);
-                        break;
-
-                    case '2':
-                        $newLastName = $this->askQuestion("Enter the last name (or type 'back' to get back): ");
-                        if ($newLastName === 'back') return;
-                        $authorInstance->setLastName($newLastName);
-                        break;
-
-                    case '3':
-                        $newNationality = $this->askQuestion("Enter the new nationality (or type 'back' to get back): ");
-                        if ($newNationality === 'back') return;
-                        $authorInstance->setNationality($newNationality);
-                        break;
-
-                    default:
-                        goto editAuthorForm;
+                $newNationality = $this->askQuestion("Enter the new nationality (or enter to skip): ");
+                if (!empty($newNationality)) {
+                    $authorInstance->setNationality($newNationality);
                 }
 
                 $this->authorService->editAuthor($authorInstance);
@@ -220,7 +209,7 @@ class ConsoleInterface extends Console
                     $this->separator();
                 }
 
-                if(sizeof($allReaders) === 0) {
+                if (sizeof($allReaders) === 0) {
                     $this->printLine("There are no readers at this moment.");
                     $this->separator();
                 }
@@ -228,9 +217,11 @@ class ConsoleInterface extends Console
 
             case '2':
                 $firstName = $this->askQuestion("Enter the first name (or type 'back' to get back): ");
-                if ($firstName === 'back') return;
+                if ($firstName === 'back')
+                    return;
                 $lastName = $this->askQuestion("Enter the last name (or type 'back' to get back): ");
-                if ($lastName === 'back') return;
+                if ($lastName === 'back')
+                    return;
 
                 $reader = new Reader($firstName, $lastName);
                 $this->readerService->addReader($reader);
@@ -243,7 +234,8 @@ class ConsoleInterface extends Console
             case '3':
                 removeReaderLable:
                 $reader = $this->askQuestion("Enter the reader id (or type 'back' to get back): ");
-                if ($reader === 'back') return;
+                if ($reader === 'back')
+                    return;
                 $readerInstance = $this->readerService->getReader($reader);
 
                 if (is_null($readerInstance)) {
@@ -267,7 +259,8 @@ class ConsoleInterface extends Console
             case '4':
                 editReader:
                 $reader = $this->askQuestion("Enter the reader id (or type 'back' to get back): ");
-                if ($reader === 'back') return;
+                if ($reader === 'back')
+                    return;
                 $readerInstance = $this->readerService->getReader($reader);
 
                 if (is_null($readerInstance)) {
@@ -283,24 +276,28 @@ class ConsoleInterface extends Console
                 $this->printOption("Edit the address", "3");
 
                 $this->value = $this->askQuestion("Enter the number (or type 'back' to get back): ", $this->expect);
-                if ($this->value === 'back') return;
+                if ($this->value === 'back')
+                    return;
 
                 switch ($this->value) {
                     case '1':
                         $newFirstName = $this->askQuestion("Enter the new first name (or type 'back' to get back): ");
-                        if ($newFirstName === 'back') return;
+                        if ($newFirstName === 'back')
+                            return;
                         $readerInstance->setFirstName($newFirstName);
                         break;
 
                     case '2':
                         $newLastName = $this->askQuestion("Enter the last name (or type 'back' to get back): ");
-                        if ($newLastName === 'back') return;
+                        if ($newLastName === 'back')
+                            return;
                         $readerInstance->setLastName($newLastName);
                         break;
 
                     case '3':
                         $newAddress = $this->askQuestion("Enter the new address (or type 'back' to get back): ");
-                        if ($newAddress === 'back') return;
+                        if ($newAddress === 'back')
+                            return;
                         $readerInstance->setAddress($newAddress);
                         break;
 
@@ -352,11 +349,11 @@ class ConsoleInterface extends Console
                     $this->printLine("ISBN : {$book->getIsbn()}");
                     $this->printLine("Publishing date : {$book->getPublishingDate()}");
                     $this->printLine("Availability : " . ($this->bookService->isBookBorrowed($book) ? "Not available" : "Available"));
-                    $this->printLine("Author : ".$book->getAuthor()->getFirstName()." ".$book->getAuthor()->getLastName());
+                    $this->printLine("Author : " . $book->getAuthor()->getFirstName() . " " . $book->getAuthor()->getLastName());
                     $this->separator();
                 }
 
-                if(sizeof($allBooks) === 0) {
+                if (sizeof($allBooks) === 0) {
                     $this->printLine("There are no books at this moment.");
                     $this->separator();
                 }
@@ -371,11 +368,11 @@ class ConsoleInterface extends Console
                     $this->printLine("ISBN : {$book->getISBN()}");
                     $this->printLine("Publishing date : {$book->getPublishingDate()}");
                     $this->printLine("Availability : Available");
-                    $this->printLine("Author : ".$book->getAuthor()->getFirstName()." ".$book->getAuthor()->getLastName());
+                    $this->printLine("Author : " . $book->getAuthor()->getFirstName() . " " . $book->getAuthor()->getLastName());
                     $this->separator();
                 }
 
-                if(sizeof($availableBooks) === 0) {
+                if (sizeof($availableBooks) === 0) {
                     $this->printLine("There are no available books at this moment.");
                     $this->separator();
                 }
@@ -384,19 +381,21 @@ class ConsoleInterface extends Console
             case '3':
                 borrowBookLable:
                 $book = $this->askQuestion("Enter the book title / id or ISBN (or type 'back' to get back): ");
-                if ($book === 'back') return;
+                if ($book === 'back')
+                    return;
                 $bookInstance = $this->bookService->getBook($book);
                 if (is_null($bookInstance)) {
                     $this->printLine("Book not found, please try again.");
                     goto borrowBookLable;
-                } else if($this->bookService->isBookBorrowed($bookInstance)) {
+                } else if ($this->bookService->isBookBorrowed($bookInstance)) {
                     $this->printLine("Book already borrowed, please try again.");
                     goto borrowBookLable;
                 }
 
                 borrowReaderLable:
                 $reader = $this->askQuestion("Enter the reader id (or type 'back' to get back): ");
-                if ($reader === 'back') return;
+                if ($reader === 'back')
+                    return;
                 $readerInstance = $this->readerService->getReader($reader);
                 if (is_null($readerInstance)) {
                     $this->printLine("Reader not found, please try again.");
@@ -404,7 +403,8 @@ class ConsoleInterface extends Console
                 }
 
                 $returnDate = (int) $this->askQuestion("Enter how many days are you going to borrow it (or type 'back' to get back): ");
-                if ($returnDate === 'back') return;
+                if ($returnDate === 'back')
+                    return;
 
                 $borrow = new Borrow($this->getDate(), $this->getDate($returnDate), null, $readerInstance, $bookInstance);
                 $this->borrowService->addBorrowing($borrow);
@@ -416,7 +416,8 @@ class ConsoleInterface extends Console
 
             case '4':
                 $book = $this->askQuestion("Enter the book title / id or ISBN (or type 'back' to get back): ");
-                if ($book === 'back') return;
+                if ($book === 'back')
+                    return;
                 $bookInstance = $this->bookService->getBook($book);
                 if (is_null($bookInstance)) {
                     $this->printLine("Book not found.");
@@ -429,21 +430,25 @@ class ConsoleInterface extends Console
                 $this->printLine("ISBN : {$bookInstance->getISBN()}");
                 $this->printLine("Publishing date : {$bookInstance->getPublishingDate()}");
                 $this->printLine("Availability : " . ($this->bookService->isBookBorrowed($bookInstance) ? "Not available" : "Available"));
-                $this->printLine("Author : ".$bookInstance->getAuthor()->getFirstName()." ".$bookInstance->getAuthor()->getLastName());
+                $this->printLine("Author : " . $bookInstance->getAuthor()->getFirstName() . " " . $bookInstance->getAuthor()->getLastName());
                 $this->separator();
                 break;
 
             case '5':
                 newBook:
                 $title = $this->askQuestion("Enter the title (or type 'back' to get back): ");
-                if ($title === 'back') return;
+                if ($title === 'back')
+                    return;
                 $isbn = $this->askQuestion("Enter the ISBN (or type 'back' to get back): ");
-                if ($isbn === 'back') return;
+                if ($isbn === 'back')
+                    return;
                 $publishing_date = $this->askQuestion("Enter the publishing date (or type 'back' to get back): ");
-                if ($publishing_date === 'back') return;
+                if ($publishing_date === 'back')
+                    return;
                 enterAuthorId:
                 $author = $this->askQuestion("Enter the author id (or type 'back' to get back): ");
-                if ($author === 'back') return;
+                if ($author === 'back')
+                    return;
 
                 $authorInstance = $this->authorService->getAuthor($author);
                 if (is_null($authorInstance)) {
@@ -462,14 +467,15 @@ class ConsoleInterface extends Console
             case '6':
                 removeBookLable:
                 $book = $this->askQuestion("Enter the book title / id or ISBN (or type 'back' to get back): ");
-                if ($book === 'back') return;
+                if ($book === 'back')
+                    return;
                 $bookInstance = $this->bookService->getBook($book);
                 if (is_null($bookInstance)) {
                     $this->printLine("Book not found, please try again.");
                     goto removeBookLable;
                 }
 
-                if($this->bookService->isBookBorrowed($bookInstance)) {
+                if ($this->bookService->isBookBorrowed($bookInstance)) {
                     $this->printLine("Book is not available in the library right now.");
                     goto removeBookLable;
                 }
@@ -491,7 +497,8 @@ class ConsoleInterface extends Console
             case '7':
                 editBook:
                 $book = $this->askQuestion("Enter the book title / id or ISBN (or type 'back' to get back): ");
-                if ($book === 'back') return;
+                if ($book === 'back')
+                    return;
                 $bookInstance = $this->bookService->getBook($book);
                 if (is_null($bookInstance)) {
                     $this->printLine("Book not found, please try again.");
@@ -507,31 +514,36 @@ class ConsoleInterface extends Console
                 $this->printOption("Edit the author", "4");
 
                 $this->value = $this->askQuestion("Enter the number (or type 'back' to get back): ", $this->expect);
-                if ($this->value === 'back') return;
+                if ($this->value === 'back')
+                    return;
 
                 switch ($this->value) {
                     case '1':
                         $newTitle = $this->askQuestion("Enter the new title (or type 'back' to get back): ");
-                        if ($newTitle === 'back') return;
+                        if ($newTitle === 'back')
+                            return;
                         $bookInstance->setTitle($newTitle);
                         break;
 
                     case '2':
                         $newISBN = $this->askQuestion("Enter the ISBN (or type 'back' to get back): ");
-                        if ($newISBN === 'back') return;
+                        if ($newISBN === 'back')
+                            return;
                         $bookInstance->setISBN($newISBN);
                         break;
 
                     case '3':
                         $newPublishingDate = $this->askQuestion("Enter the publishing date (or type 'back' to get back): ");
-                        if ($newPublishingDate === 'back') return;
+                        if ($newPublishingDate === 'back')
+                            return;
                         $bookInstance->setPublishingDate($newPublishingDate);
                         break;
 
                     case '4':
                         findAuthor:
                         $author = $this->askQuestion("Enter the author id (or type 'back' to get back): ");
-                        if ($author === 'back') return;
+                        if ($author === 'back')
+                            return;
                         $authorsInstances = $this->authorService->getAuthor($author);
                         if (is_null($authorsInstances)) {
                             $this->printLine("Author not found, please try again.");
@@ -558,12 +570,12 @@ class ConsoleInterface extends Console
                     $this->printLine("ID : {$borrowing->getId()}");
                     $this->printLine("Date of borrowing : {$borrowing->getBorrowedDate()}");
                     $this->printLine("Expect return date : {$borrowing->getExpectedReturnDate()}");
-                    $this->printLine("Actual return date : ".($borrowing->getActualReturnDate() ?? "Not returned yet"));
-                    $this->printLine("Book : ".$borrowing->getBook()->getId()." - ".$borrowing->getBook()->getTitle());
+                    $this->printLine("Actual return date : " . ($borrowing->getActualReturnDate() ?? "Not returned yet"));
+                    $this->printLine("Book : " . $borrowing->getBook()->getId() . " - " . $borrowing->getBook()->getTitle());
                     $this->separator();
                 }
 
-                if(sizeof($borrowings) === 0) {
+                if (sizeof($borrowings) === 0) {
                     $this->printLine("There are no borrowings at this moment.");
                     $this->separator();
                 }
