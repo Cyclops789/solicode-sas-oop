@@ -320,17 +320,19 @@ class ConsoleInterface extends Console
 
     public function enterBooksMode(): void
     {
-        $this->expect = ['1', '2', '3', '4', '5', '6', '7', '8'];
+        $this->expect = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
         $this->printOption("Show all books", "1");
         $this->printOption("Show all Available books", "2");
-        $this->printOption("Borrow a book", "3");
-        $this->printOption("Search for a boook", "4");
-
-        $this->printOption("Add a books", "5");
-        $this->printOption("Remove a books", "6");
-        $this->printOption("Edit a book", "7");
-        $this->printOption("Show all borrowings", "8");
+        $this->printOption("Search for a boook", "3");
+        $this->printLine("");
+        $this->printOption("Add a books", "4");
+        $this->printOption("Remove a books", "5");
+        $this->printOption("Edit a book", "6");
+        $this->printLine("");
+        $this->printOption("Show all borrowings", "7");
+        $this->printOption("Borrow a book", "8");
+        $this->printOption("Remove a Borrowing", "9");
 
         $this->printLine("Type 'back' to get back or 'exit' to exit the application");
 
@@ -378,7 +380,7 @@ class ConsoleInterface extends Console
                 }
                 break;
 
-            case '3':
+            case '8':
                 borrowBookLable:
                 $book = $this->askQuestion("Enter the book title / id or ISBN (or type 'back' to get back): ");
                 if ($book === 'back')
@@ -414,7 +416,7 @@ class ConsoleInterface extends Console
                 $this->separator();
                 break;
 
-            case '4':
+            case '3':
                 $book = $this->askQuestion("Enter the book title / id or ISBN (or type 'back' to get back): ");
                 if ($book === 'back')
                     return;
@@ -434,7 +436,7 @@ class ConsoleInterface extends Console
                 $this->separator();
                 break;
 
-            case '5':
+            case '4':
                 newBook:
                 $title = $this->askQuestion("Enter the title (or type 'back' to get back): ");
                 if ($title === 'back')
@@ -464,7 +466,7 @@ class ConsoleInterface extends Console
                 $this->separator();
                 break;
 
-            case '6':
+            case '5':
                 removeBookLable:
                 $book = $this->askQuestion("Enter the book title / id or ISBN (or type 'back' to get back): ");
                 if ($book === 'back')
@@ -494,7 +496,7 @@ class ConsoleInterface extends Console
                 }
                 break;
 
-            case '7':
+            case '6':
                 editBook:
                 $book = $this->askQuestion("Enter the book title / id or ISBN (or type 'back' to get back): ");
                 if ($book === 'back')
@@ -563,21 +565,47 @@ class ConsoleInterface extends Console
                 $this->separator();
                 break;
 
-            case '8':
+            case '7':
                 $borrowings = $this->borrowService->getBorrowings();
                 $this->separator();
                 foreach ($borrowings as $borrowing) {
-                    $this->printLine("ID : {$borrowing->getId()}");
+                    $this->printLine("ID : #{$borrowing->getId()}");
                     $this->printLine("Date of borrowing : {$borrowing->getBorrowedDate()}");
                     $this->printLine("Expect return date : {$borrowing->getExpectedReturnDate()}");
                     $this->printLine("Actual return date : " . ($borrowing->getActualReturnDate() ?? "Not returned yet"));
-                    $this->printLine("Book : " . $borrowing->getBook()->getId() . " - " . $borrowing->getBook()->getTitle());
+                    $this->printLine("Book : #" . $borrowing->getBook()->getId() . " - " . $borrowing->getBook()->getTitle());
+                    $this->printLine("Reader : #" . $borrowing->getReader()->getId() . " - " . $borrowing->getReader()->getFirstName()." ".$borrowing->getReader()->getLastName());
                     $this->separator();
                 }
 
                 if (sizeof($borrowings) === 0) {
                     $this->printLine("There are no borrowings at this moment.");
                     $this->separator();
+                }
+                break;
+            
+            case '9':
+                removeBorrowingLable:
+                $borrow = $this->askQuestion("Enter the borrowing id (or type 'back' to get back): ");
+                if ($borrow === 'back')
+                    return;
+                $borrowInstance = $this->borrowService->getBorrowing($borrow);
+                if (is_null($borrowInstance)) {
+                    $this->printLine("Borrow not found, please try again.");
+                    goto removeBorrowingLable;
+                }
+
+                $bookRemoved = $this->borrowService->removeBorrowing($borrowInstance);
+
+                if ($bookRemoved) {
+                    $this->separator();
+                    $this->printLine("Borrow has been removed!");
+                    $this->separator();
+                } else {
+                    $this->separator();
+                    $this->printLine("Sorry the borrow wasnt found, please try again!");
+                    $this->separator();
+                    goto removeBorrowingLable;
                 }
                 break;
 
